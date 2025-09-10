@@ -13,17 +13,16 @@ endif()
 
 # Include directories (relative to Panelator folder)
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}                                        # .
-    ${CMAKE_CURRENT_SOURCE_DIR}/Win                                    # Parser.h, LicensingUtils.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party                             # JSON etc.
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Headers                   # SDK/Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Headers/SP                # SDK/Headers/SP
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Headers/Win               # SDK/Headers/Win
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Resources                 # SDK/Resources
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Util                      # SDK/Util
-    ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
+    ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
+    ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON etc.
+    ${CMAKE_SOURCE_DIR}/Examples/Headers
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
+    ${CMAKE_SOURCE_DIR}/Examples/Resources
+    ${CMAKE_SOURCE_DIR}/Examples/Util
+    ${CMAKE_SOURCE_DIR}/Examples/AEGP/Panelator/aescripts-PLUGINS-licensing-framework/include
 )
-
 # Cross-platform sources
 set(SOURCES
     panelator.cpp
