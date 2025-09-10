@@ -21,9 +21,9 @@ jobs:
         xcode-version: latest-stable
 
     - name: Create Info.plist template
-      working-directory: Examples/AEGP/Panelator
       run: |
-        cat > Info.plist.in << 'EOF'
+        mkdir -p Examples/AEGP/Panelator
+        cat > Examples/AEGP/Panelator/Info.plist.in << 'EOF'
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
@@ -53,14 +53,13 @@ jobs:
         EOF
 
     - name: Configure CMake
-      working-directory: Examples/AEGP/Panelator
       run: |
         mkdir build
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
 
     - name: Build plugin
-      working-directory: Examples/AEGP/Panelator/build
+      working-directory: build
       run: cmake --build . --config Release
 
     - name: Verify build

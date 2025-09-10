@@ -3,6 +3,46 @@ project(PathLink)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# --- Debug: Print directory information ---
+message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+
+# Now CMAKE_SOURCE_DIR should be the repository root
+set(PANELATOR_SOURCE_DIR "${CMAKE_SOURCE_DIR}/Examples/AEGP/Panelator")
+
+# Check if key directories exist
+set(AE_HEADERS_DIR "${CMAKE_SOURCE_DIR}/Examples/Headers")
+if(EXISTS "${AE_HEADERS_DIR}")
+    message(STATUS "✓ Found AE Headers directory: ${AE_HEADERS_DIR}")
+    # List some key files
+    file(GLOB AE_HEADER_FILES "${AE_HEADERS_DIR}/*.h")
+    message(STATUS "Sample header files in ${AE_HEADERS_DIR}:")
+    foreach(header ${AE_HEADER_FILES})
+        get_filename_component(header_name ${header} NAME)
+        message(STATUS "  - ${header_name}")
+    endforeach()
+else()
+    message(WARNING "✗ AE Headers directory NOT FOUND: ${AE_HEADERS_DIR}")
+endif()
+
+# Check specifically for AEConfig.h
+set(AECONFIG_PATH "${AE_HEADERS_DIR}/AEConfig.h")
+if(EXISTS "${AECONFIG_PATH}")
+    message(STATUS "✓ Found AEConfig.h at: ${AECONFIG_PATH}")
+else()
+    message(WARNING "✗ AEConfig.h NOT FOUND at: ${AECONFIG_PATH}")
+    # Search for it elsewhere
+    file(GLOB_RECURSE AECONFIG_SEARCH "${CMAKE_SOURCE_DIR}/**/AEConfig.h")
+    if(AECONFIG_SEARCH)
+        message(STATUS "Found AEConfig.h at alternative locations:")
+        foreach(config_file ${AECONFIG_SEARCH})
+            message(STATUS "  - ${config_file}")
+        endforeach()
+    else()
+        message(WARNING "AEConfig.h not found anywhere in the project!")
+    endif()
+endif()
+
 # --- macOS-specific settings ---
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
@@ -21,10 +61,10 @@ set(INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/Examples/Resources            # Resources  
     ${CMAKE_SOURCE_DIR}/Examples/Util                 # Utilities
     # Project-specific directories
-    ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
-    ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h (cross-platform)
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON, other third-party headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
+    ${PANELATOR_SOURCE_DIR}                          # Panelator root
+    ${PANELATOR_SOURCE_DIR}/Win                      # Parser.h, LicensingUtils.h (cross-platform)
+    ${PANELATOR_SOURCE_DIR}/third_party              # JSON, other third-party headers
+    ${PANELATOR_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
 )
 
 # Platform-specific include directories
@@ -49,26 +89,26 @@ include_directories(${INCLUDE_DIRS})
 
 # --- Cross-platform source files ---
 set(SOURCES
-    panelator.cpp
-    PanelatorUI.cpp
-    Panelator_Strings.cpp
+    ${PANELATOR_SOURCE_DIR}/panelator.cpp
+    ${PANELATOR_SOURCE_DIR}/PanelatorUI.cpp
+    ${PANELATOR_SOURCE_DIR}/Panelator_Strings.cpp
     # Include cross-platform sources from Win directory
-    Win/Parser.cpp
-    Win/LicensingUtils.cpp
+    ${PANELATOR_SOURCE_DIR}/Win/Parser.cpp
+    ${PANELATOR_SOURCE_DIR}/Win/LicensingUtils.cpp
 )
 
 # --- Platform-specific sources ---
 if(APPLE)
-    # Check if PanelatorUI_Mac.mm exists, otherwise create a placeholder or use cross-platform version
-    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Win/PanelatorUI_Mac.mm")
-        list(APPEND SOURCES Win/PanelatorUI_Mac.mm)
+    # Check if PanelatorUI_Mac.mm exists, otherwise use cross-platform version
+    if(EXISTS "${PANELATOR_SOURCE_DIR}/Win/PanelatorUI_Mac.mm")
+        list(APPEND SOURCES ${PANELATOR_SOURCE_DIR}/Win/PanelatorUI_Mac.mm)
     else()
         # Use the Windows platform file as base for now - you may need to adapt this
-        list(APPEND SOURCES Win/PanelatorUI_Plat.cpp)
+        list(APPEND SOURCES ${PANELATOR_SOURCE_DIR}/Win/PanelatorUI_Plat.cpp)
     endif()
 elseif(WIN32)
     list(APPEND SOURCES
-        Win/PanelatorUI_Plat.cpp
+        ${PANELATOR_SOURCE_DIR}/Win/PanelatorUI_Plat.cpp
     )
 endif()
 
@@ -78,7 +118,7 @@ if(APPLE)
     set_target_properties(PathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
-        MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist.in
+        MACOSX_BUNDLE_INFO_PLIST ${PANELATOR_SOURCE_DIR}/Info.plist.in
         MACOSX_BUNDLE_BUNDLE_NAME "PathLink"
         MACOSX_BUNDLE_IDENTIFIER "com.yourcompany.pathlink"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0"
