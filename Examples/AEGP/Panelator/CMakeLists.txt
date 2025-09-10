@@ -4,25 +4,27 @@ project(PathLink)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Platform-specific settings
+# macOS-specific settings
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
     enable_language(OBJCXX)
     set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
 endif()
 
-# Include directories (relative to AfterEffectsSDK root)
+# Include directories (relative to Panelator folder)
 include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}                      # Panelator root
-    ${CMAKE_CURRENT_SOURCE_DIR}/Headers              # if you add local headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party
-    ${CMAKE_CURRENT_SOURCE_DIR}/Win
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/Examples/Headers
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../SDK/Util
+    ${CMAKE_CURRENT_SOURCE_DIR}                                        # .
+    ${CMAKE_CURRENT_SOURCE_DIR}/Win                                    # Parser.h, LicensingUtils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party                             # JSON etc.
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Headers                   # SDK/Headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Headers/SP                # SDK/Headers/SP
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Headers/Win               # SDK/Headers/Win
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Resources                 # SDK/Resources
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../../../Util                      # SDK/Util
+    ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
 )
 
-# Collect cross-platform sources
+# Cross-platform sources
 set(SOURCES
     panelator.cpp
     PanelatorUI.cpp
@@ -30,27 +32,24 @@ set(SOURCES
 )
 
 # Platform-specific sources
-if(WIN32)
+if(APPLE)
     list(APPEND SOURCES
-        Win/PanelatorUI_Plat.cpp
-	Win/LicensingUtils.cpp
-	Win/Parser.cpp
-    )
-elseif(APPLE)
-    list(APPEND SOURCES
+        Win/Parser.cpp
+        Win/LicensingUtils.cpp
         Win/PanelatorUI_Mac.mm
-	Win/LicensingUtils.cpp
-	Win/Parser.cpp
-
+    )
+elseif(WIN32)
+    list(APPEND SOURCES
+        Win/Parser.cpp
+        Win/LicensingUtils.cpp
+        Win/PanelatorUI_Plat.cpp
     )
 endif()
 
-# Create plugin target
+# Create plugin
 if(APPLE)
-    # macOS plugin bundle
     add_library(PathLink MODULE ${SOURCES})
 
-    # Bundle properties
     set_target_properties(PathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
@@ -61,7 +60,6 @@ if(APPLE)
         MACOSX_BUNDLE_BUNDLE_VERSION "1"
     )
 
-    # Link macOS frameworks
     target_link_libraries(PathLink
         "-framework Cocoa"
         "-framework CoreFoundation"
@@ -72,9 +70,7 @@ if(APPLE)
         MAC_ENV=1
         kMacOS=1
     )
-
 elseif(WIN32)
-    # Windows plugin
     add_library(PathLink SHARED ${SOURCES})
     set_target_properties(PathLink PROPERTIES SUFFIX ".aex")
 
