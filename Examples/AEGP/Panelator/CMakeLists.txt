@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
 project(PathLink)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -14,34 +13,48 @@ endif()
 # --- Include directories ---
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
-    ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h (cross-platform)
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON, other third-party headers
-    ${CMAKE_SOURCE_DIR}/Examples/Headers
-    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
-    ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
-    ${CMAKE_SOURCE_DIR}/Examples/Resources
-    ${CMAKE_SOURCE_DIR}/Examples/Util
     ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
+    # After Effects SDK headers - corrected paths
+    ${CMAKE_SOURCE_DIR}/Examples/Headers              # Main AE headers
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP           # Smart Pointers
+    ${CMAKE_SOURCE_DIR}/Examples/Resources            # Resources
+    ${CMAKE_SOURCE_DIR}/Examples/Util                 # Utilities
 )
+
+# Platform-specific include directories
+if(APPLE)
+    include_directories(
+        ${CMAKE_SOURCE_DIR}/Examples/Headers/Mac      # macOS-specific headers
+    )
+elseif(WIN32)
+    include_directories(
+        ${CMAKE_SOURCE_DIR}/Examples/Headers/Win      # Windows-specific headers
+    )
+endif()
 
 # --- Cross-platform source files ---
 set(SOURCES
     panelator.cpp
     PanelatorUI.cpp
     Panelator_Strings.cpp
+    # Include cross-platform sources from Win directory
+    Win/Parser.cpp
+    Win/LicensingUtils.cpp
 )
 
 # --- Platform-specific sources ---
 if(APPLE)
-    list(APPEND SOURCES
-        Win/Parser.cpp
-        Win/LicensingUtils.cpp
-        Win/PanelatorUI_Mac.mm
-    )
+    # Check if PanelatorUI_Mac.mm exists, otherwise create a placeholder or use cross-platform version
+    if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/Win/PanelatorUI_Mac.mm")
+        list(APPEND SOURCES Win/PanelatorUI_Mac.mm)
+    else()
+        # Use the Windows platform file as base for now - you may need to adapt this
+        list(APPEND SOURCES Win/PanelatorUI_Plat.cpp)
+    endif()
 elseif(WIN32)
     list(APPEND SOURCES
-        Win/Parser.cpp
-        Win/LicensingUtils.cpp
         Win/PanelatorUI_Plat.cpp
     )
 endif()
@@ -49,7 +62,6 @@ endif()
 # --- Create plugin target ---
 if(APPLE)
     add_library(PathLink MODULE ${SOURCES})
-
     set_target_properties(PathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
@@ -59,26 +71,30 @@ if(APPLE)
         MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0"
         MACOSX_BUNDLE_BUNDLE_VERSION "1"
     )
-
     target_link_libraries(PathLink
         "-framework Cocoa"
         "-framework CoreFoundation"
         "-framework Foundation"
     )
-
     target_compile_definitions(PathLink PRIVATE
         MAC_ENV=1
         kMacOS=1
+        MSWindows=0
     )
-
+    
+    # macOS-specific compiler flags
+    target_compile_options(PathLink PRIVATE
+        -Wno-deprecated-declarations
+        -fvisibility=hidden
+    )
+    
 elseif(WIN32)
     add_library(PathLink SHARED ${SOURCES})
     set_target_properties(PathLink PROPERTIES SUFFIX ".aex")
-
     target_link_libraries(PathLink shell32 user32)
-
     target_compile_definitions(PathLink PRIVATE
         WIN_ENV=1
         _WINDOWS=1
+        MSWindows=1
     )
 endif()
