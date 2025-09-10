@@ -4,31 +4,18 @@ project(PathLink)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# macOS-specific settings
+# --- macOS-specific settings ---
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
     enable_language(OBJCXX)
     set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
 endif()
 
-# Debug: print all include directories
-message("Panelator source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
-message("SDK include directories:")
-foreach(dir ${SDK_HEADERS})
-    message("  ${dir}")
-endforeach()
-
-# Optional: check which headers are visible
-foreach(dir ${SDK_HEADERS})
-    file(GLOB HEADER_FILES "${dir}/*.h")
-    message("Headers in ${dir}: ${HEADER_FILES}")
-endforeach()
-
-# Include directories
+# --- Include directories ---
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
     ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON etc.
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON, other third-party headers
     ${CMAKE_SOURCE_DIR}/Examples/Headers
     ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
     ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
@@ -37,14 +24,14 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
 )
 
-# --- Cross-platform sources ---
+# --- Cross-platform source files ---
 set(SOURCES
     panelator.cpp
     PanelatorUI.cpp
     Panelator_Strings.cpp
 )
 
-# Platform-specific sources
+# --- Platform-specific sources ---
 if(APPLE)
     list(APPEND SOURCES
         Win/Parser.cpp
@@ -83,6 +70,7 @@ if(APPLE)
         MAC_ENV=1
         kMacOS=1
     )
+
 elseif(WIN32)
     add_library(PathLink SHARED ${SOURCES})
     set_target_properties(PathLink PROPERTIES SUFFIX ".aex")
