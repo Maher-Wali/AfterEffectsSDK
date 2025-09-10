@@ -1,0 +1,28 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Allow existing files (including sitemap.xml) to be served directly
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Handle assets (images, CSS, JS, fonts)
+    RewriteCond %{REQUEST_URI} \.(jpg|jpeg|png|gif|svg|css|js|pdf|woff|woff2|ttf|eot|otf|ico)$ [OR]
+    RewriteCond %{REQUEST_URI} ^/(uploads|fonts|css|js|images)/ [OR]
+    RewriteCond %{REQUEST_URI} ^/favicon\.ico$
+    RewriteRule ^(.*)$ assets.php [L]
+
+    # Route everything else to Symfony index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
+
+# Serve XML with correct MIME type
+<FilesMatch "\.xml$">
+    AddType application/xml .xml
+</FilesMatch>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

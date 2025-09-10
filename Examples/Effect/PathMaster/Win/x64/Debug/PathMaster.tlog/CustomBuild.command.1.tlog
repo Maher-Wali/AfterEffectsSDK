@@ -1,0 +1,4 @@
+^C:\ADOBE\AFTEREFFECTSSDK\EXAMPLES\EFFECT\PATHMASTER\PATHMASTERPIPL.R
+cl /I "C:\Adobe\AfterEffectsSDK\Examples\Effect\PathMaster\Win\..\..\..\Headers" /EP ".."\\"PathMasterPiPL.r" > "x64\Debug\"\\"PathMasterPiPL.rr"
+"C:\Adobe\AfterEffectsSDK\Examples\Effect\PathMaster\Win\..\..\..\Resources\PiPLTool" "x64\Debug\PathMasterPiPL.rr" "x64\Debug\PathMasterPiPL.rrc"
+cl /D "MSWindows" /EP x64\Debug\PathMasterPiPL.rrc >               "C:\Adobe\AfterEffectsSDK\Examples\Effect\PathMaster\Win\"\\"PathMasterPiPL".rc

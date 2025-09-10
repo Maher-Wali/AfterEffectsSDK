@@ -1,0 +1,33 @@
+﻿  Compiling the PiPL
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35211 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  PathMasterPiPL.r
+  Microsoft (R) C/C++ Optimizing Compiler Version 19.44.35211 for x64
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+  PathMasterPiPL.rrc
+  AEFX_SuiteHelper.c
+C:\Adobe\AfterEffectsSDK\Examples\Headers\AE_EffectSuites.h(746,10): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+  (compiling source file '../../../Util/AEFX_SuiteHelper.c')
+  
+  AEGP_SuiteHandler.cpp
+C:\Adobe\AfterEffectsSDK\Examples\Headers\AE_EffectSuites.h(746,10): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+  (compiling source file '../../../Util/AEGP_SuiteHandler.cpp')
+  
+  MissingSuiteError.cpp
+C:\Adobe\AfterEffectsSDK\Examples\Headers\AE_EffectSuites.h(746,10): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+  (compiling source file '../../../Util/MissingSuiteError.cpp')
+  
+  PathMaster.cpp
+C:\Adobe\AfterEffectsSDK\Examples\Headers\AE_EffectSuites.h(746,10): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+  (compiling source file '../PathMaster.cpp')
+  
+  PathMaster_Strings.cpp
+C:\Adobe\AfterEffectsSDK\Examples\Headers\AE_EffectSuites.h(746,10): warning C4103: alignment changed after including header, may be due to missing #pragma pack(pop)
+  (compiling source file '../PathMaster_Strings.cpp')
+  
+  Generating Code...
+C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(1402,5): warning MSB8012: TargetPath(C:\PathMaster.aex) does not match the Linker's OutputFile property value (C:\Adobe\AfterEffectsSDK\Examples\AEGP\output\PathMaster.aex). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     Creating library x64\Debug\/PathMaster.lib and object x64\Debug\/PathMaster.exp
+  PathMaster.vcxproj -> C:\PathMaster.aex
