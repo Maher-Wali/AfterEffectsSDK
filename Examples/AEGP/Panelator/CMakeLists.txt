@@ -11,16 +11,18 @@ if(APPLE)
 endif()
 
 # --- Include directories ---
+# Note: Order matters! AE SDK headers should come first
 include_directories(
+    # After Effects SDK headers - these must come first
+    ${CMAKE_SOURCE_DIR}/Examples/Headers              # Main AE headers (contains AEConfig.h)
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP           # Smart Pointers
+    ${CMAKE_SOURCE_DIR}/Examples/Resources            # Resources  
+    ${CMAKE_SOURCE_DIR}/Examples/Util                 # Utilities
+    # Project-specific directories
     ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
     ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h (cross-platform)
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON, other third-party headers
     ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
-    # After Effects SDK headers - corrected paths
-    ${CMAKE_SOURCE_DIR}/Examples/Headers              # Main AE headers
-    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP           # Smart Pointers
-    ${CMAKE_SOURCE_DIR}/Examples/Resources            # Resources
-    ${CMAKE_SOURCE_DIR}/Examples/Util                 # Utilities
 )
 
 # Platform-specific include directories
