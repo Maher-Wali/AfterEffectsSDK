@@ -1,0 +1,144 @@
+name: Build Cross-Platform Plugin
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: latest-stable
+
+    - name: Create Info.plist template
+      working-directory: Examples/AEGP/Panelator
+      run: |
+        cat > Info.plist.in << 'EOF'
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>CFBundleDevelopmentRegion</key>
+            <string>en</string>
+            <key>CFBundleExecutable</key>
+            <string>\${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
+            <key>CFBundleIdentifier</key>
+            <string>\${MACOSX_BUNDLE_IDENTIFIER}</string>
+            <key>CFBundleInfoDictionaryVersion</key>
+            <string>6.0</string>
+            <key>CFBundleName</key>
+            <string>\${MACOSX_BUNDLE_BUNDLE_NAME}</string>
+            <key>CFBundlePackageType</key>
+            <string>BNDL</string>
+            <key>CFBundleShortVersionString</key>
+            <string>\${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+            <key>CFBundleVersion</key>
+            <string>\${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
+            <key>CSResourcesFileMapped</key>
+            <true/>
+            <key>LSMinimumSystemVersion</key>
+            <string>10.13</string>
+        </dict>
+        </plist>
+        EOF
+
+    - name: Configure CMake
+      working-directory: Examples/AEGP/Panelator
+      run: |
+        mkdir build
+        cd build
+        cmake -DCMAKE_BUILD_TYPE=Release ..
+
+    - name: Build plugin
+      working-directory: Examples/AEGP/Panelator/build
+      run: cmake --build . --config Release
+
+    - name: Verify build
+      working-directory: Examples/AEGP/Panelator/build
+      run: |
+        echo "Build artifacts:"
+        find . -name "*.plugin" -exec ls -la {} \;
+        find . -name "*.plugin" -exec file {} \;
+
+        PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
+        if [ -n "$PLUGIN_PATH" ]; then
+            echo "Plugin bundle contents:"
+            find "$PLUGIN_PATH" -type f -exec ls -la {} \;
+
+            echo "Executable dependencies:"
+            find "$PLUGIN_PATH" -name "PathLink" -exec otool -L {} \; || true
+        fi
+
+    - name: Package for distribution
+      working-directory: Examples/AEGP/Panelator/build
+      run: |
+        PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
+        if [ -n "$PLUGIN_PATH" ]; then
+            zip -r ../../../../PathLink-macOS.zip "$PLUGIN_PATH"
+        else
+            echo "No plugin found!"
+            exit 1
+        fi
+
+    - name: Upload plugin
+      uses: actions/upload-artifact@v4
+      with:
+        name: PathLink-macOS
+        path: PathLink-macOS.zip
+        retention-days: 30
+
+  # You can comment out Windows job if you only want macOS
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: Configure CMake
+      working-directory: Examples/AEGP/Panelator
+      run: |
+        mkdir build
+        cd build
+        cmake -G "Visual Studio 17 2022" -A x64 ..
+        
+    - name: Build plugin
+      working-directory: Examples/AEGP/Panelator/build
+      run: cmake --build . --config Release
+        
+    - name: Verify build
+      working-directory: Examples/AEGP/Panelator/build
+      run: |
+        echo "Build artifacts:"
+        Get-ChildItem -Recurse -Include "*.aex" | Format-Table
+        
+    - name: Package for distribution
+      working-directory: Examples/AEGP/Panelator/build
+      run: |
+        $pluginPath = Get-ChildItem -Recurse -Include "*.aex" | Select-Object -First 1
+        if ($pluginPath) {
+            Compress-Archive -Path $pluginPath.FullName -DestinationPath "../../../../PathLink-Windows.zip"
+        } else {
+            Write-Error "No plugin found!"
+            exit 1
+        }
+        
+    - name: Upload plugin
+      uses: actions/upload-artifact@v4
+      with:
+        name: PathLink-Windows
+        path: PathLink-Windows.zip
+        retention-days: 30
