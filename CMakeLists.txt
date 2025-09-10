@@ -133,6 +133,7 @@ if(APPLE)
         MAC_ENV=1
         kMacOS=1
         MSWindows=0
+        AE_DISABLE_PANELS=1  # Try to disable panel-related includes
     )
     
     # macOS-specific compiler flags
