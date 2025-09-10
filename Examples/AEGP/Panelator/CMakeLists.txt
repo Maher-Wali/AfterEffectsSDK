@@ -11,16 +11,6 @@ if(APPLE)
     set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
 endif()
 
-# --- Include directories ---
-set(SDK_HEADERS
-    ${CMAKE_SOURCE_DIR}/Examples/Headers
-    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
-    ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
-    ${CMAKE_SOURCE_DIR}/Examples/Resources
-    ${CMAKE_SOURCE_DIR}/Examples/Util
-
-)
-
 # Debug: print all include directories
 message("Panelator source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
 message("SDK include directories:")
@@ -34,11 +24,16 @@ foreach(dir ${SDK_HEADERS})
     message("Headers in ${dir}: ${HEADER_FILES}")
 endforeach()
 
+# Include directories
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
     ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON etc.
-    ${SDK_HEADERS}                                    # AE SDK headers
+    ${CMAKE_SOURCE_DIR}/Examples/Headers
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
+    ${CMAKE_SOURCE_DIR}/Examples/Resources
+    ${CMAKE_SOURCE_DIR}/Examples/Util
     ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
 )
 
