@@ -16,7 +16,7 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
     ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
     ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON etc.
-    ${CMAKE_SOURCE_DIR}/Examples/Headers
+    ${CMAKE_CURRENT_SOURCE_DIR}../../Headers
     ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
     ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
     ${CMAKE_SOURCE_DIR}/Examples/Resources
@@ -27,7 +27,7 @@ include_directories(
 set(SOURCES
     panelator.cpp
     PanelatorUI.cpp
-    Panelator_Strings.cpp
+    Panelator_Strings.cpp 
 )
 
 # Platform-specific sources
