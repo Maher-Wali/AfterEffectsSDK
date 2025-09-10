@@ -16,10 +16,10 @@ endif()
 # Define all include directories in variables first for easier debugging
 set(INCLUDE_DIRS
     # After Effects SDK headers - these must come first
-    ${CMAKE_SOURCE_DIR}../../../Examples/Headers              # Main AE headers (contains AEConfig.h)
-    ${CMAKE_SOURCE_DIR}../../../Examples/Headers/SP           # Smart Pointers
-    ${CMAKE_SOURCE_DIR}../../../Examples/Resources            # Resources  
-    ${CMAKE_SOURCE_DIR}../../../Examples/Util                 # Utilities
+    ${CMAKE_SOURCE_DIR}/Examples/Headers              # Main AE headers (contains AEConfig.h)
+    ${CMAKE_SOURCE_DIR}/Examples/Headers/SP           # Smart Pointers
+    ${CMAKE_SOURCE_DIR}/Examples/Resources            # Resources  
+    ${CMAKE_SOURCE_DIR}/Examples/Util                 # Utilities
     # Project-specific directories
     ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
     ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h (cross-platform)
