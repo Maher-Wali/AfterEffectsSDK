@@ -80,7 +80,7 @@ foreach(inc_dir ${INCLUDE_DIRS})
     if(EXISTS "${inc_dir}")
         message(STATUS "✓ Include dir exists: ${inc_dir}")
     else()
-        message(WARNING "✗ Include dir MISSING: ${inc_dir}")
+        message(STATUS "✗ Include dir MISSING: ${inc_dir}")
     endif()
 endforeach()
 
@@ -129,17 +129,33 @@ if(APPLE)
         "-framework CoreFoundation"
         "-framework Foundation"
     )
+    
+    # CRITICAL: Define macros to disable panel functionality
     target_compile_definitions(PathLink PRIVATE
         MAC_ENV=1
         kMacOS=1
         MSWindows=0
-        AE_DISABLE_PANELS=1  # Try to disable panel-related includes
+        AE_DISABLE_PANELS=1          # Disable panel-related includes
+        AE_OS_MAC=1                  # Define macOS
+        __MACH__=1                   # macOS identifier
+        AEGP_PLUGIN=1                # This is an AEGP plugin
+        AE_PLUGIN_SUPPORT_PANELS=0   # Explicitly disable panel support
     )
     
     # macOS-specific compiler flags
     target_compile_options(PathLink PRIVATE
         -Wno-deprecated-declarations
         -fvisibility=hidden
+        -Wno-pragma-pack          # Suppress pragma pack warnings
+        -Wno-unknown-pragmas      # Suppress unknown pragma warnings
+        -fobjc-arc                # Enable ARC for Objective-C++ files
+    )
+    
+    # Set specific compilation flags for .mm files
+    set_source_files_properties(
+        ${PANELATOR_SOURCE_DIR}/Win/PanelatorUI_Mac.mm
+        PROPERTIES
+        COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
     
 elseif(WIN32)
