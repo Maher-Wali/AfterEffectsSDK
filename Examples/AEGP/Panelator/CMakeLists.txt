@@ -27,18 +27,21 @@ set(SOURCES
     panelator.cpp
     PanelatorUI.cpp
     Panelator_Strings.cpp
-    Parser.cpp
-    LicensingUtils.cpp
 )
 
 # Platform-specific sources
 if(WIN32)
     list(APPEND SOURCES
         Win/PanelatorUI_Plat.cpp
+	Win/LicensingUtils.cpp
+	Win/Parser.cpp
     )
 elseif(APPLE)
     list(APPEND SOURCES
-        PanelatorUI_Mac.mm
+        Win/PanelatorUI_Mac.mm
+	Win/LicensingUtils.cpp
+	Win/Parser.cpp
+
     )
 endif()
 
