@@ -1,0 +1,402 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		7E24CDBE10471A4D009722BA /* AEFX_SuiteHelper.c in Sources */ = {isa = PBXBuildFile; fileRef = 7E24CDBC10471A4D009722BA /* AEFX_SuiteHelper.c */; };
+		9FEE5982277F0E8C002EFE28 /* EffectPiPL.r in Rez */ = {isa = PBXBuildFile; fileRef = 9FEE5981277F0E8B002EFE28 /* EffectPiPL.r */; };
+		B3BF044B25D1569B0080025D /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF044A25D1569B0080025D /* libcurl.tbd */; };
+		CE72624B174187CC008338E7 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE72624A174187CC008338E7 /* IOKit.framework */; };
+		CE72624D174187D3008338E7 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE72624C174187D3008338E7 /* CoreFoundation.framework */; };
+		CE72624F174187D9008338E7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE72624E174187D9008338E7 /* Cocoa.framework */; };
+		D0136FE00AD2CFDD0012331F /* Smart_Utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D0136FDE0AD2CFDD0012331F /* Smart_Utils.cpp */; };
+		D05CB6E909C7948A0070A8DA /* AEGP_SuiteHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05CB6E809C7948A0070A8DA /* AEGP_SuiteHandler.cpp */; };
+		D05CB6EC09C7949D0070A8DA /* MissingSuiteError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D05CB6EB09C7949D0070A8DA /* MissingSuiteError.cpp */; };
+		D075387F09940A81000099DF /* licTestPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D075387E09940A81000099DF /* licTestPlugin.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		7E24CDBC10471A4D009722BA /* AEFX_SuiteHelper.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = AEFX_SuiteHelper.c; path = ../../../../Adobe_AfterEffects_SDK/Examples/Util/AEFX_SuiteHelper.c; sourceTree = SOURCE_ROOT; };
+		7E24CDBD10471A4D009722BA /* AEFX_SuiteHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AEFX_SuiteHelper.h; path = ../../../../Adobe_AfterEffects_SDK/Examples/Util/AEFX_SuiteHelper.h; sourceTree = SOURCE_ROOT; };
+		9FEE5981277F0E8B002EFE28 /* EffectPiPL.r */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.rez; name = EffectPiPL.r; path = ../EffectPiPL.r; sourceTree = "<group>"; };
+		B3BF044A25D1569B0080025D /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
+		C4E618CC095A3CE80012CA3F /* licTestPlugin.plugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = licTestPlugin.plugin; sourceTree = BUILT_PRODUCTS_DIR; };
+		CE72624A174187CC008338E7 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		CE72624C174187D3008338E7 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		CE72624E174187D9008338E7 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		D0136FDE0AD2CFDD0012331F /* Smart_Utils.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = Smart_Utils.cpp; path = ../../../../Adobe_AfterEffects_SDK/Examples/Util/Smart_Utils.cpp; sourceTree = SOURCE_ROOT; };
+		D0136FDF0AD2CFDD0012331F /* Smart_Utils.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = Smart_Utils.h; path = ../../../../Adobe_AfterEffects_SDK/Examples/Util/Smart_Utils.h; sourceTree = SOURCE_ROOT; };
+		D042AE6B0A77FAA200D67417 /* AE_Effect.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = AE_Effect.h; path = ../../../../Adobe_AfterEffects_SDK/Examples/Headers/AE_Effect.h; sourceTree = SOURCE_ROOT; };
+		D042AE6C0A77FAB200D67417 /* licTestPlugin.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = licTestPlugin.h; path = ../licTestPlugin.h; sourceTree = SOURCE_ROOT; };
+		D05CB6E809C7948A0070A8DA /* AEGP_SuiteHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = AEGP_SuiteHandler.cpp; path = ../../../../Adobe_AfterEffects_SDK/Examples/Util/AEGP_SuiteHandler.cpp; sourceTree = SOURCE_ROOT; };
+		D05CB6EB09C7949D0070A8DA /* MissingSuiteError.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = MissingSuiteError.cpp; path = ../../../../Adobe_AfterEffects_SDK/Examples/Util/MissingSuiteError.cpp; sourceTree = SOURCE_ROOT; };
+		D075387E09940A81000099DF /* licTestPlugin.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = licTestPlugin.cpp; path = ../licTestPlugin.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C4E618CA095A3CE80012CA3F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3BF044B25D1569B0080025D /* libcurl.tbd in Frameworks */,
+				CE72624F174187D9008338E7 /* Cocoa.framework in Frameworks */,
+				CE72624D174187D3008338E7 /* CoreFoundation.framework in Frameworks */,
+				CE72624B174187CC008338E7 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C4E6187C095A3C800012CA3F = {
+			isa = PBXGroup;
+			children = (
+				9FEE5981277F0E8B002EFE28 /* EffectPiPL.r */,
+				B3BF044A25D1569B0080025D /* libcurl.tbd */,
+				CE72624E174187D9008338E7 /* Cocoa.framework */,
+				CE72624C174187D3008338E7 /* CoreFoundation.framework */,
+				CE72624A174187CC008338E7 /* IOKit.framework */,
+				D075387E09940A81000099DF /* licTestPlugin.cpp */,
+				D042AE6C0A77FAB200D67417 /* licTestPlugin.h */,
+				D05CB6ED09C794A00070A8DA /* Supporting Code */,
+				C4E6188C095A3C800012CA3F /* Products */,
+			);
+			comments = "See these pixels? Let's move 'em over here. Oh, and blend them with their source pixels.";
+			sourceTree = "<group>";
+		};
+		C4E6188C095A3C800012CA3F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C4E618CC095A3CE80012CA3F /* licTestPlugin.plugin */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D05CB6ED09C794A00070A8DA /* Supporting Code */ = {
+			isa = PBXGroup;
+			children = (
+				D042AE6B0A77FAA200D67417 /* AE_Effect.h */,
+				7E24CDBC10471A4D009722BA /* AEFX_SuiteHelper.c */,
+				7E24CDBD10471A4D009722BA /* AEFX_SuiteHelper.h */,
+				D05CB6E809C7948A0070A8DA /* AEGP_SuiteHandler.cpp */,
+				D05CB6EB09C7949D0070A8DA /* MissingSuiteError.cpp */,
+				D0136FDE0AD2CFDD0012331F /* Smart_Utils.cpp */,
+				D0136FDF0AD2CFDD0012331F /* Smart_Utils.h */,
+			);
+			name = "Supporting Code";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C4E618CB095A3CE80012CA3F /* licTestPlugin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4E618CE095A3CE90012CA3F /* Build configuration list for PBXNativeTarget "licTestPlugin" */;
+			buildPhases = (
+				C4E618C9095A3CE80012CA3F /* Sources */,
+				C4E618EA095A3E040012CA3F /* Rez */,
+				C4E618CA095A3CE80012CA3F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = licTestPlugin;
+			productName = licTestPlugin.plugin;
+			productReference = C4E618CC095A3CE80012CA3F /* licTestPlugin.plugin */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C4E6187E095A3C800012CA3F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1300;
+				TargetAttributes = {
+					C4E618CB095A3CE80012CA3F = {
+						DevelopmentTeam = YL6UJ9V949;
+					};
+				};
+			};
+			buildConfigurationList = C4E6187F095A3C800012CA3F /* Build configuration list for PBXProject "licTestPlugin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C4E6187C095A3C800012CA3F;
+			productRefGroup = C4E6188C095A3C800012CA3F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C4E618CB095A3CE80012CA3F /* licTestPlugin */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXRezBuildPhase section */
+		C4E618EA095A3E040012CA3F /* Rez */ = {
+			isa = PBXRezBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9FEE5982277F0E8C002EFE28 /* EffectPiPL.r in Rez */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXRezBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C4E618C9095A3CE80012CA3F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D075387F09940A81000099DF /* licTestPlugin.cpp in Sources */,
+				D05CB6E909C7948A0070A8DA /* AEGP_SuiteHandler.cpp in Sources */,
+				D05CB6EC09C7949D0070A8DA /* MissingSuiteError.cpp in Sources */,
+				D0136FE00AD2CFDD0012331F /* Smart_Utils.cpp in Sources */,
+				7E24CDBE10471A4D009722BA /* AEFX_SuiteHelper.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		C4E61880095A3C800012CA3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_REUSE_STRINGS = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../../../Adobe_AfterEffects_SDK/Examples/Headers,
+					../../../../Adobe_AfterEffects_SDK/Examples/Util,
+					../../../../Adobe_AfterEffects_SDK/Examples/Headers/SP,
+					../../../../Adobe_AfterEffects_SDK/Examples/Resources,
+				);
+				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = NO;
+				REZ_PREPROCESSOR_DEFINITIONS = __MACH__;
+				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = YES;
+			};
+			name = Debug;
+		};
+		C4E618CF095A3CE90012CA3F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_PRAGMA_PACK = NO;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DEVELOPMENT_TEAM = "";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				GENERATE_PKGINFO_FILE = YES;
+				INFOPLIST_FILE = "licTestPlugin.plugin-Info.plist";
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				"OTHER_LDFLAGS[arch=*]" = ../../lib/MacOS/aescriptsLicensing_Debug.a;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AfterEffects.licTestPlugin;
+				PRODUCT_NAME = licTestPlugin;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = plugin;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		CE72626017419369008338E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = "";
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_REUSE_STRINGS = NO;
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = NO;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					../../../../Adobe_AfterEffects_SDK/Examples/Headers,
+					../../../../Adobe_AfterEffects_SDK/Examples/Util,
+					../../../../Adobe_AfterEffects_SDK/Examples/Headers/SP,
+					../../../../Adobe_AfterEffects_SDK/Examples/Resources,
+				);
+				LLVM_LTO = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CODE_SIGN_FLAGS = "--timestamp";
+				REZ_PREPROCESSOR_DEFINITIONS = __MACH__;
+				SDKROOT = macosx;
+				STRIP_INSTALLED_PRODUCT = YES;
+				SYMROOT = /tmp;
+			};
+			name = Release;
+		};
+		CE72626117419369008338E7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LIBRARY = "compiler-default";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_PRAGMA_PACK = NO;
+				CODE_SIGN_IDENTITY = "Developer ID Application";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
+				DEVELOPMENT_TEAM = YL6UJ9V949;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Carbon.framework/Headers/Carbon.h";
+				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_THREADSAFE_STATICS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				GCC_WARN_UNUSED_FUNCTION = NO;
+				GCC_WARN_UNUSED_LABEL = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				GENERATE_PKGINFO_FILE = YES;
+				INFOPLIST_FILE = "licTestPlugin.plugin-Info.plist";
+				LINK_WITH_STANDARD_LIBRARIES = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				OTHER_LDFLAGS = (
+					"-framework",
+					Carbon,
+				);
+				"OTHER_LDFLAGS[arch=*]" = ../../lib/MacOS/aescriptsLicensing_Release.a;
+				PRODUCT_BUNDLE_IDENTIFIER = com.adobe.AfterEffects.licTestPlugin;
+				PRODUCT_NAME = licTestPlugin;
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = plugin;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C4E6187F095A3C800012CA3F /* Build configuration list for PBXProject "licTestPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4E61880095A3C800012CA3F /* Debug */,
+				CE72626017419369008338E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 1;
+			defaultConfigurationName = Release;
+		};
+		C4E618CE095A3CE90012CA3F /* Build configuration list for PBXNativeTarget "licTestPlugin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4E618CF095A3CE90012CA3F /* Debug */,
+				CE72626117419369008338E7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C4E6187E095A3C800012CA3F /* Project object */;
+}

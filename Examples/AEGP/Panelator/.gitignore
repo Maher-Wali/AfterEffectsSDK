@@ -1,0 +1,20 @@
+# Ignore Visual Studio temporary files, build results, and cache
+.vs/
+*.user
+*.suo
+*.vscode/
+
+# Build output
+[Bb]in/
+[Oo]bj/
+Debug/
+Release/
+x64/
+x86/
+ipch/
+*.log
+
+# Other temporary files
+*.db
+*.opendb
+*.VC.db

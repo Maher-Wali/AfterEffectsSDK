@@ -1,0 +1,178 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B3BF044F25D1581B0080025D /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF044E25D1581B0080025D /* libcurl.tbd */; };
+		CED054BF173BA61B0035EA31 /* aescriptsLicenser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED054BE173BA61B0035EA31 /* aescriptsLicenser.cpp */; };
+		CED054CF173BA7780035EA31 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED054CE173BA7780035EA31 /* IOKit.framework */; };
+		CED054D2173BA7830035EA31 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED054D1173BA7830035EA31 /* CoreFoundation.framework */; };
+		CED054D4173BA7920035EA31 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED054D3173BA7920035EA31 /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE79690C171755730085DC4D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B3BF044E25D1581B0080025D /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
+		CED054BE173BA61B0035EA31 /* aescriptsLicenser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aescriptsLicenser.cpp; path = ../aescriptsLicenser.cpp; sourceTree = "<group>"; };
+		CED054C0173BA6230035EA31 /* aescriptsLicensing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aescriptsLicensing.h; path = ../../include/aescriptsLicensing.h; sourceTree = "<group>"; };
+		CED054CE173BA7780035EA31 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		CED054D1173BA7830035EA31 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+		CED054D3173BA7920035EA31 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE79690B171755730085DC4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3BF044F25D1581B0080025D /* libcurl.tbd in Frameworks */,
+				CED054D4173BA7920035EA31 /* Cocoa.framework in Frameworks */,
+				CED054D2173BA7830035EA31 /* CoreFoundation.framework in Frameworks */,
+				CED054CF173BA7780035EA31 /* IOKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE796903171755730085DC4D = {
+			isa = PBXGroup;
+			children = (
+				B3BF044E25D1581B0080025D /* libcurl.tbd */,
+				CED054D3173BA7920035EA31 /* Cocoa.framework */,
+				CED054D1173BA7830035EA31 /* CoreFoundation.framework */,
+				CED054CE173BA7780035EA31 /* IOKit.framework */,
+				CED054C0173BA6230035EA31 /* aescriptsLicensing.h */,
+				CED054BE173BA61B0035EA31 /* aescriptsLicenser.cpp */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE79690D171755730085DC4D /* aescriptsLicenser */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE796918171755730085DC4D /* Build configuration list for PBXNativeTarget "aescriptsLicenser" */;
+			buildPhases = (
+				CE79690A171755730085DC4D /* Sources */,
+				CE79690B171755730085DC4D /* Frameworks */,
+				CE79690C171755730085DC4D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = aescriptsLicenser;
+			productName = aescriptsLicenser;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE796905171755730085DC4D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = CE796908171755730085DC4D /* Build configuration list for PBXProject "aescriptsLicenser" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CE796903171755730085DC4D;
+			productRefGroup = CE796903171755730085DC4D;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE79690D171755730085DC4D /* aescriptsLicenser */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE79690A171755730085DC4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CED054BF173BA61B0035EA31 /* aescriptsLicenser.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CE796917171755730085DC4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CE79691A171755730085DC4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ADDITIONAL_SDKS = "";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[arch=i386]" = "../../lib/MacOS/aescriptsLicensing_libstdc++_Release_32.a";
+				"OTHER_LDFLAGS[arch=x86_64]" = "../../lib/MacOS/aescriptsLicensing_libstdc++_Release_64.a";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE796908171755730085DC4D /* Build configuration list for PBXProject "aescriptsLicenser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE796917171755730085DC4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE796918171755730085DC4D /* Build configuration list for PBXNativeTarget "aescriptsLicenser" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE79691A171755730085DC4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE796905171755730085DC4D /* Project object */;
+}

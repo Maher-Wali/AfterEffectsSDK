@@ -1,0 +1,197 @@
+4.1.4 - April 2025
+- cleanup of licensing sample code and header (aescriptsLicensing_AdobeHelpers.h and TMsgDlg.h):
+  no longer "using namespace std", added sanity checks
+- support/compatibility for newer and older versions of the VS2022 runtime (see note in manual about this)
+- example for license usage in an AEGP plugin
+- various security enhancements and bugfixes
+
+4.1.3 - October 2024 
+- bugfix for local license activation when license server is configured
+
+4.1.2 - October 2024 
+- bugfix for remote license activation (Error -6 Invalid product header)
+
+4.1.1 - September 2024 
+- bugfix for name resolution of .local and .localdomain hostnames
+- improved error checking
+ 
+4.1.0 - August 2024 
+- support for incremental online validation intervals
+- support for new license type FSU (floating subscription licenses)
+- support for offline licensing method
+- new function "aescriptsGetRawLicenseDataFromFile" to get the raw contents of a license file
+- online activation check interval changed back from 90 to 30 days, will be checked in 30, 30, 90, 180 intervals, then never
+- overuse check mechanism now terminates correctly in standalone applications
+
+4.0.7 - February 2023
+- improved stability of overuse check mechanism
+- fixed release library for VS2022
+
+4.0.6 - November 2022
+- grace period for online activation is now 90 instead of 30 days
+- increased compatibility on MacOS with certain Xcode and clang settings
+- fixed stripping of symbols on MacOS
+- lowest supported MacOS version is now 10.13
+
+4.0.5 - July 2022
+- support for extended privnums
+- support for subscription licenses (SUB and ESB)
+- improved support for grace periods in online activation
+- various bugfixes for online activation
+
+4.0.4 - April 2022
+- bugfix for floating licenses ("invalid format")
+- improved threading model on Windows
+- more robust handling of license file saving
+
+4.0.3 - March 2022
+- treat empty license files the same as non-existent files for floating licenses
+- trim whitespaces on entering license
+- correct error message when trying to use a floating license locally
+- improved versioning support in registration dialog (now an optional parameter in the showRegistrationDialog() function)
+- improved online validation server communication
+- improved backwards compatibility
+- manual extended with common AE plugin problems
+- more robust string handling in registration dialog
+- corrected return code for invalid format of license strings (was -8, is now -1)
+- simplified licTestPlugin (no longer using sequence data)
+
+4.0.2 - January 2022
+- overall better error handling
+- unified error code handling with 'Get Help' links for each error
+- requestLicenseFromLicenseServer() function now also includes a parameter for product version info
+- improved license registration dialog
+- new function aescriptsGetLicLibBuildVersion() to get more detailed
+  information about the licensing library version
+- online validation enabled by default
+- The defines "AE_LICLIB_VERSION", "AE_LICLIB_BUILD_DATE" and
+  "AE_LICLIB_VERSION_TAG" in the header file have been renamed to
+  "AESCRIPTSLICLIB_VERSION", "AESCRIPTSLICLIB_BUILD_DATE" and
+  "AESCRIPTSLICLIB_VERSION_TAG"
+- fixed hash license issue
+
+
+4.0.1 - December 2021
+- bugfix for online license validation - sometimes the request could be rejected by the validation server
+- support for Visual Studio 2022
+
+4.0 - November 2021
+- obsolete function getLicenseFromLicenseServer removed, use requestLicenseFromLicenseServer and dropLicenseFromLicenseServer instead
+- added description of behaviour for loadLicenseFromFile if no license file is present and floating server is configured
+- libs now also provided for VS2019 natively
+- added test license for floating license for test plugin in manual
+- new function getLicenseDataFromFile
+- improved wording/description of addBlockedSerial()
+- MacOS builds now require linking to libcurl
+- MacOS builds are universal binaries now that support M1/Silicone
+- MacOS support for libstdc++ was dropped by Apple
+
+3.9.2 - May 28, 2020
+- bugfix for daysSinceFirstStart value
+
+3.9.1 - May 26, 2020
+- bugfix for machine id check, could return error -2 (different machine id) on some systems
+
+3.9 - May 2020
+- blocking of Apple Macbook touchbar network bridges
+- improved machine ID processing
+
+3.8 - September 2019
+- support for remote network users who don't have a local home directory
+- more robust against special characters in user and computer names
+- support for additional library plist configuration file for license server config
+- bugfixes for license server communication
+- improved handling of floating licenses
+
+3.7 - August 2019
+- support for 16-digit private numbers
+- automatically try to get floating license if plist is present and in render-only mode
+- support for reading environment variable for floating license server config
+- bugfix for servers with space(s) in computername
+- added check if version of header matches version of library
+
+3.6 - April 2019
+- extended LicenseData with startDate, endDate
+- field serial in LicenseData expanded to 64 characters
+- support for time-limited licenses
+
+3.5 - August 2018
+- sanity check for overuse call
+- support for VS2017
+- better error handling
+
+3.4 - February 2018
+- bugfix for overuse checks
+- full support for VS2010 (overuse functionality was disabled before for that compiler)
+
+3.3 - January 2018
+- bugfix for render-only and non single-user licenses
+
+3.2 - November 2017
+- various bugfixes for "overuse" checks
+- network adapter detection improved
+- bugfix for trial days detection
+- improved error handling
+
+3.1 - September 2017
+- registration dialog now reports if a license does not exist on the server
+- userID/logged user name bugfix on MacOS
+
+3.0 - July 2017
+- big update/rewrite, support for licensing server
+
+2.2 - Feb 5, 2016
+- MacOS: support for libc++ and libstdc++
+- improved license test AE plugin
+- new header: aescriptsLicensing_AEHelpers.h
+- support for trial licenses (expire after x days)
+
+2.1 - Oct 30, 2015
+- Visual Studio 2015 compatibility
+- more flexible license file loading in restricted environments
+- improved license test AE plugin
+- MacOS: preferences folder is now "/Library/Application Support"
+
+2.0 - July 21, 2014
+- dynamic denylist
+- Premiere Pro compatible UI
+- code cleanup
+- Visual Studio 2013 compatibility
+- license can now be deactivated in the dialog
+
+1.9 - May 12, 2014
+- Unicode path fixes on Asian systems, static denylist
+
+1.8 - April 15, 2014
+- support for systems with no ethernet adapters or WiFi only
+
+1.7a - Feb 8, 2014
+- small bugfix for reading older license files
+
+1.7 - Jan 29, 2014
+- bugfix for certain MAC/network adapter errors, causing correct license to be seen as invalid
+
+1.6 - Oct 18, 2013
+- support for disabled or changing MAC address/NIC
+- added note about disk cache in CS6+
+
+1.5 - Sep 30, 2013
+- sample plugin supports Premiere Pro now
+- better documentation/manual
+- support for render-only licenses
+
+1.4 - Sep 3, 2013
+- support for Visual Studio 2008
+- disabled global optimisations
+
+1.3 - July 30, 2013
+- support for Visual Studio 2012
+
+1.2 - July 15, 2013
+- support for multi-threaded linker settings
+
+1.1 - July 12, 2013
+- support for differently compiled template libraries
+
+1.0 - May 15, 2013
+- initial release

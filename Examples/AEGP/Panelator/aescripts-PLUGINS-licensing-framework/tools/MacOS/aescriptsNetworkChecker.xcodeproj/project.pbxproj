@@ -1,0 +1,178 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		B3BF045125D158320080025D /* libcurl.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = B3BF045025D158320080025D /* libcurl.tbd */; };
+		CED054DF173BA9D40035EA31 /* aescriptsNetworkChecker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CED054DE173BA9D40035EA31 /* aescriptsNetworkChecker.cpp */; };
+		CED054E1173BA9E00035EA31 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED054E0173BA9E00035EA31 /* Cocoa.framework */; };
+		CED054E3173BA9E70035EA31 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED054E2173BA9E70035EA31 /* IOKit.framework */; };
+		CED054E9173BAACD0035EA31 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CED054E8173BAACD0035EA31 /* CoreFoundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		CE79690C171755730085DC4D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		B3BF045025D158320080025D /* libcurl.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libcurl.tbd; path = usr/lib/libcurl.tbd; sourceTree = SDKROOT; };
+		CED054DD173BA9CC0035EA31 /* aescriptsLicensing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = aescriptsLicensing.h; path = ../../include/aescriptsLicensing.h; sourceTree = "<group>"; };
+		CED054DE173BA9D40035EA31 /* aescriptsNetworkChecker.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = aescriptsNetworkChecker.cpp; path = ../aescriptsNetworkChecker.cpp; sourceTree = "<group>"; };
+		CED054E0173BA9E00035EA31 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		CED054E2173BA9E70035EA31 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		CED054E8173BAACD0035EA31 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CE79690B171755730085DC4D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3BF045125D158320080025D /* libcurl.tbd in Frameworks */,
+				CED054E9173BAACD0035EA31 /* CoreFoundation.framework in Frameworks */,
+				CED054E3173BA9E70035EA31 /* IOKit.framework in Frameworks */,
+				CED054E1173BA9E00035EA31 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		CE796903171755730085DC4D = {
+			isa = PBXGroup;
+			children = (
+				B3BF045025D158320080025D /* libcurl.tbd */,
+				CED054E8173BAACD0035EA31 /* CoreFoundation.framework */,
+				CED054E2173BA9E70035EA31 /* IOKit.framework */,
+				CED054E0173BA9E00035EA31 /* Cocoa.framework */,
+				CED054DE173BA9D40035EA31 /* aescriptsNetworkChecker.cpp */,
+				CED054DD173BA9CC0035EA31 /* aescriptsLicensing.h */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		CE79690D171755730085DC4D /* aescriptsNetworkChecker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE796918171755730085DC4D /* Build configuration list for PBXNativeTarget "aescriptsNetworkChecker" */;
+			buildPhases = (
+				CE79690A171755730085DC4D /* Sources */,
+				CE79690B171755730085DC4D /* Frameworks */,
+				CE79690C171755730085DC4D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = aescriptsNetworkChecker;
+			productName = aescriptsNetworkChecker;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CE796905171755730085DC4D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = CE796908171755730085DC4D /* Build configuration list for PBXProject "aescriptsNetworkChecker" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CE796903171755730085DC4D;
+			productRefGroup = CE796903171755730085DC4D;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CE79690D171755730085DC4D /* aescriptsNetworkChecker */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CE79690A171755730085DC4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CED054DF173BA9D40035EA31 /* aescriptsNetworkChecker.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CE796917171755730085DC4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		CE79691A171755730085DC4D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ADDITIONAL_SDKS = "";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				CLANG_CXX_LIBRARY = "libstdc++";
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[arch=i386]" = "../../lib/MacOS/aescriptsLicensing_libstdc++_Release_32.a";
+				"OTHER_LDFLAGS[arch=x86_64]" = "../../lib/MacOS/aescriptsLicensing_libstdc++_Release_64.a";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CE796908171755730085DC4D /* Build configuration list for PBXProject "aescriptsNetworkChecker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE796917171755730085DC4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE796918171755730085DC4D /* Build configuration list for PBXNativeTarget "aescriptsNetworkChecker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CE79691A171755730085DC4D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CE796905171755730085DC4D /* Project object */;
+}
