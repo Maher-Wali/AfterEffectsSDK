@@ -11,23 +11,42 @@ if(APPLE)
     set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
 endif()
 
-# Include directories (relative to Panelator folder)
-include_directories(
-    ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
-    ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON etc.
-    ${CMAKE_CURRENT_SOURCE_DIR}../../Headers
+# --- Include directories ---
+set(SDK_HEADERS
+    ${CMAKE_SOURCE_DIR}/Examples/Headers
     ${CMAKE_SOURCE_DIR}/Examples/Headers/SP
     ${CMAKE_SOURCE_DIR}/Examples/Headers/Win
     ${CMAKE_SOURCE_DIR}/Examples/Resources
     ${CMAKE_SOURCE_DIR}/Examples/Util
-    ${CMAKE_SOURCE_DIR}/Examples/AEGP/Panelator/aescripts-PLUGINS-licensing-framework/include
+
 )
-# Cross-platform sources
+
+# Debug: print all include directories
+message("Panelator source dir: ${CMAKE_CURRENT_SOURCE_DIR}")
+message("SDK include directories:")
+foreach(dir ${SDK_HEADERS})
+    message("  ${dir}")
+endforeach()
+
+# Optional: check which headers are visible
+foreach(dir ${SDK_HEADERS})
+    file(GLOB HEADER_FILES "${dir}/*.h")
+    message("Headers in ${dir}: ${HEADER_FILES}")
+endforeach()
+
+include_directories(
+    ${CMAKE_CURRENT_SOURCE_DIR}                       # Panelator root
+    ${CMAKE_CURRENT_SOURCE_DIR}/Win                   # Parser.h, LicensingUtils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party           # JSON etc.
+    ${SDK_HEADERS}                                    # AE SDK headers
+    ${CMAKE_CURRENT_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/include
+)
+
+# --- Cross-platform sources ---
 set(SOURCES
     panelator.cpp
     PanelatorUI.cpp
-    Panelator_Strings.cpp 
+    Panelator_Strings.cpp
 )
 
 # Platform-specific sources
@@ -45,7 +64,7 @@ elseif(WIN32)
     )
 endif()
 
-# Create plugin
+# --- Create plugin target ---
 if(APPLE)
     add_library(PathLink MODULE ${SOURCES})
 
