@@ -12,7 +12,9 @@ endif()
 
 # --- Include directories ---
 # Note: Order matters! AE SDK headers should come first
-include_directories(
+
+# Define all include directories in variables first for easier debugging
+set(INCLUDE_DIRS
     # After Effects SDK headers - these must come first
     ${CMAKE_SOURCE_DIR}/Examples/Headers              # Main AE headers (contains AEConfig.h)
     ${CMAKE_SOURCE_DIR}/Examples/Headers/SP           # Smart Pointers
@@ -27,14 +29,23 @@ include_directories(
 
 # Platform-specific include directories
 if(APPLE)
-    include_directories(
-        ${CMAKE_SOURCE_DIR}/Examples/Headers/Mac      # macOS-specific headers
-    )
+    list(APPEND INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/Examples/Headers/Mac)
 elseif(WIN32)
-    include_directories(
-        ${CMAKE_SOURCE_DIR}/Examples/Headers/Win      # Windows-specific headers
-    )
+    list(APPEND INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/Examples/Headers/Win)
 endif()
+
+# Debug: Print all include directories and check if they exist
+message(STATUS "=== INCLUDE DIRECTORIES DEBUG ===")
+foreach(inc_dir ${INCLUDE_DIRS})
+    if(EXISTS "${inc_dir}")
+        message(STATUS "✓ Include dir exists: ${inc_dir}")
+    else()
+        message(WARNING "✗ Include dir MISSING: ${inc_dir}")
+    endif()
+endforeach()
+
+# Apply the include directories
+include_directories(${INCLUDE_DIRS})
 
 # --- Cross-platform source files ---
 set(SOURCES
