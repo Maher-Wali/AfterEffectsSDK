@@ -1,7 +1,7 @@
 #ifndef _PANEL_TESTER_UI_PLAT_H_
 #define _PANEL_TESTER_UI_PLAT_H_
 
-#include "..\PanelatorUI.h"
+#include "PanelatorUI.h"
 #include "SPBasic.h"
 #include "AEConfig.h"
 
