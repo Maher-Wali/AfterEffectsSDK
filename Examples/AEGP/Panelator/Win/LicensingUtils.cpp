@@ -6,8 +6,8 @@
 #include "AE_Macros.h"
 #include "AEGP_SuiteHandler.h"
 #include "Config.h"
-#include "C:\Adobe\AfterEffectsSDK\Examples\AEGP\Panelator\aescripts-PLUGINS-licensing-framework\include\aescriptsLicensing.h"
-#include "C:\Adobe\AfterEffectsSDK\Examples\AEGP\Panelator\aescripts-PLUGINS-licensing-framework\include\aescriptsLicensing_AdobeHelpers.h"
+#include "../aescripts-PLUGINS-licensing-framework/include/aescriptsLicensing.h"
+#include "../aescripts-PLUGINS-licensing-framework/include/aescriptsLicensing_AdobeHelpers.h"
 
 namespace LicensingUtils {
     void InitializeLicense(AEGP_SuiteHandler& suites) {
