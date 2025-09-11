@@ -100,6 +100,13 @@ set(SOURCES
     ${PANELATOR_SOURCE_DIR}/Win/LicensingUtils.cpp
 )
 
+list(APPEND SOURCES
+	${CMAKE_SOURCE_DIR}/Examples/Util/AEGP_SuiteHandler.cpp
+	${CMAKE_SOURCE_DIR}/Examples/Util/AEGP_Utils.cpp
+	${CMAKE_SOURCE_DIR}/Examples/Util/MissingSuiteError.cpp
+	${CMAKE_SOURCE_DIR}/Examples/Util/Smart_Utils.cpp
+)
+
 # --- Platform-specific sources ---
 if(APPLE)
     # Check if PanelatorUI_Mac.mm exists, otherwise use cross-platform version
