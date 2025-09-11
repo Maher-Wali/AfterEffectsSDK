@@ -117,7 +117,7 @@ PanelatorUI_Mac::PanelatorUI_Mac(SPBasicSuite* spbP, AEGP_PanelH panelH,
     i_panelView(nullptr)
 {
     // Create our custom view
-    NSView* containerView = (__bridge NSView*)platformViewRef;
+    NSView* containerView = platformViewRef;
     NSRect frame = [containerView bounds];
     
     PanelatorView* panelView = [[PanelatorView alloc] initWithFrame:frame cppInstance:this];

@@ -147,6 +147,7 @@ if(APPLE)
         kMacOS=1
         MSWindows=0
         AE_DISABLE_PANELS=1          # Disable panel-related includes
+        AE_DISABLE_LICENSING=1       # Disable licensing framework for macOS build
         # Don't redefine AE_OS_MAC since it's already defined in AEConfig.h
         __MACH__=1                   # macOS identifier
         AEGP_PLUGIN=1                # This is an AEGP plugin
@@ -160,6 +161,9 @@ if(APPLE)
         -Wno-pragma-pack          # Suppress pragma pack warnings
         -Wno-unknown-pragmas      # Suppress unknown pragma warnings
         -Wno-macro-redefined      # Suppress macro redefinition warnings
+        -Wno-nonportable-include-path  # Suppress case-sensitive path warnings
+        -Wno-undefined-var-template    # Suppress panel suite template warnings
+        -Wno-null-conversion      # Suppress NULL to int conversion warnings
         -fobjc-arc                # Enable ARC for Objective-C++ files
     )
     
