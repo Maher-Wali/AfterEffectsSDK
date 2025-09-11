@@ -341,6 +341,7 @@
     <ClInclude Include="..\..\..\Util\String_Utils.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="LicensingUtils.h" />
+    <ClInclude Include="PanelatorUI_Mac.h" />
     <ClInclude Include="PanelatorUI_Plat.h" />
     <ClInclude Include="Parser.h" />
   </ItemGroup>
@@ -378,6 +379,7 @@ cl /D "MSWindows" /EP $(IntDir)%(Filename).rrc &gt;               "$(ProjectDir)
   <ItemGroup>
     <ClCompile Include="..\..\..\Util\AEGP_SuiteHandler.cpp" />
     <ClCompile Include="LicensingUtils.cpp" />
+    <ClCompile Include="PanelatorUI_Mac.cpp" />
     <ClCompile Include="PanelatorUI_Plat.cpp" />
     <ClCompile Include="..\..\..\Util\MissingSuiteError.cpp" />
     <ClCompile Include="..\Panelator.cpp" />

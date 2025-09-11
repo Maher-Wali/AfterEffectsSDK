@@ -48,6 +48,9 @@ if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
     enable_language(OBJCXX)
     set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
+    
+    # IMPORTANT: Set all .cpp files to be compiled as Objective-C++
+    set(CMAKE_CXX_COMPILE_OBJECT "${CMAKE_OBJCXX_COMPILE_OBJECT}")
 endif()
 
 # --- Include directories ---
@@ -115,6 +118,13 @@ endif()
 # --- Create plugin target ---
 if(APPLE)
     add_library(PathLink MODULE ${SOURCES})
+    
+    # CRITICAL: Set all source files to be compiled as Objective-C++
+    set_source_files_properties(${SOURCES} PROPERTIES
+        LANGUAGE OBJCXX
+        COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
+    )
+    
     set_target_properties(PathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
@@ -124,19 +134,20 @@ if(APPLE)
         MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0"
         MACOSX_BUNDLE_BUNDLE_VERSION "1"
     )
+    
     target_link_libraries(PathLink
         "-framework Cocoa"
         "-framework CoreFoundation"
         "-framework Foundation"
     )
     
-    # CRITICAL: Define macros to disable panel functionality
+    # CRITICAL: Define macros - fix the macro redefinition warning
     target_compile_definitions(PathLink PRIVATE
         MAC_ENV=1
         kMacOS=1
         MSWindows=0
         AE_DISABLE_PANELS=1          # Disable panel-related includes
-        AE_OS_MAC=1                  # Define macOS
+        # Don't redefine AE_OS_MAC since it's already defined in AEConfig.h
         __MACH__=1                   # macOS identifier
         AEGP_PLUGIN=1                # This is an AEGP plugin
         AE_PLUGIN_SUPPORT_PANELS=0   # Explicitly disable panel support
@@ -148,14 +159,8 @@ if(APPLE)
         -fvisibility=hidden
         -Wno-pragma-pack          # Suppress pragma pack warnings
         -Wno-unknown-pragmas      # Suppress unknown pragma warnings
+        -Wno-macro-redefined      # Suppress macro redefinition warnings
         -fobjc-arc                # Enable ARC for Objective-C++ files
-    )
-    
-    # Set specific compilation flags for .mm files
-    set_source_files_properties(
-        ${PANELATOR_SOURCE_DIR}/Win/PanelatorUI_Mac.mm
-        PROPERTIES
-        COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
     
 elseif(WIN32)

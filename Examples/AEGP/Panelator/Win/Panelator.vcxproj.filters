@@ -95,6 +95,9 @@
     <ClInclude Include="LicensingUtils.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="PanelatorUI_Mac.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Panelator_PiPL.rc">
@@ -114,6 +117,7 @@
     <ClCompile Include="PanelatorUI_Plat.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="LicensingUtils.cpp" />
+    <ClCompile Include="PanelatorUI_Mac.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\Panelator_PiPL.r">
