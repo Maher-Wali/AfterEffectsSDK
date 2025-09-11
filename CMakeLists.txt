@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(PathLink)
+project(AEPathLink)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -152,7 +152,7 @@ if(APPLE)
         ${PANELATOR_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/lib/macos/aescriptsLicensing_Release.a
     )
 
-    target_link_libraries(PathLink
+    target_link_libraries(AEPathLink
         "-framework Cocoa"
         "-framework CoreFoundation"
         "-framework IOKit"
@@ -160,7 +160,7 @@ if(APPLE)
         ${AESCRIPTS_LIB}
     )
 
-    target_compile_definitions(PathLink PRIVATE
+    target_compile_definitions(AEPathLink PRIVATE
         MAC_ENV=1
         kMacOS=1
         MSWindows=0
@@ -168,7 +168,7 @@ if(APPLE)
         AE_PLUGIN_SUPPORT_PANELS=0
     )
 
-    target_compile_options(PathLink PRIVATE
+    target_compile_options(AEPathLink PRIVATE
         -Wno-deprecated-declarations
         -fvisibility=hidden
         -Wno-pragma-pack
