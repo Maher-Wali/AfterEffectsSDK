@@ -63,7 +63,7 @@ jobs:
       run: cmake --build . --config Release
 
     - name: Verify build
-      working-directory: Examples/AEGP/Panelator/build
+      working-directory: build
       run: |
         echo "Build artifacts:"
         find . -name "*.plugin" -exec ls -la {} \;
@@ -79,7 +79,7 @@ jobs:
         fi
 
     - name: Package for distribution
-      working-directory: Examples/AEGP/Panelator/build
+      working-directory: build
       run: |
         PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
         if [ -n "$PLUGIN_PATH" ]; then
