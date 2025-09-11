@@ -83,7 +83,7 @@ jobs:
       run: |
         PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
         if [ -n "$PLUGIN_PATH" ]; then
-            zip -r ../../../../PathLink-macOS.zip "$PLUGIN_PATH"
+            zip -r $GITHUB_WORKSPACE/PathLink-macOS.zip "$PLUGIN_PATH"
         else
             echo "No plugin found!"
             exit 1
@@ -93,7 +93,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: PathLink-macOS
-        path: PathLink-macOS.zip
+        path: ${{ github.workspace }}/PathLink-macOS.zip
         retention-days: 30
 
   # You can comment out Windows job if you only want macOS
