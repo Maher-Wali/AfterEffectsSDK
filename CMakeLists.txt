@@ -118,13 +118,18 @@ endif()
 # --- Create plugin target ---
 if(APPLE)
     add_library(PathLink MODULE ${SOURCES})
-    
+
+    # Add SuiteHandler.cpp from AE SDK Util
+    list(APPEND SOURCES
+        ${CMAKE_SOURCE_DIR}/Examples/Util/SuiteHandler.cpp
+    )
+
     # CRITICAL: Set all source files to be compiled as Objective-C++
     set_source_files_properties(${SOURCES} PROPERTIES
         LANGUAGE OBJCXX
         COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
-    
+
     set_target_properties(PathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
@@ -134,46 +139,37 @@ if(APPLE)
         MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0"
         MACOSX_BUNDLE_BUNDLE_VERSION "1"
     )
-    
+
+    # Path to aescripts licensing library (adjust if your repo has a different structure)
+    set(AESCRIPTS_LIB
+        ${PANELATOR_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/lib/macos/aescriptsLicensing_Release.a
+    )
+
     target_link_libraries(PathLink
         "-framework Cocoa"
         "-framework CoreFoundation"
-        "-framework Foundation"
+        "-framework IOKit"
+        "-lcurl"
+        ${AESCRIPTS_LIB}
     )
-    
-    # CRITICAL: Define macros - fix the macro redefinition warning
+
     target_compile_definitions(PathLink PRIVATE
         MAC_ENV=1
         kMacOS=1
         MSWindows=0
-        AE_DISABLE_PANELS=1          # Disable panel-related includes
-        AE_DISABLE_LICENSING=1       # Disable licensing framework for macOS build
-        # Don't redefine AE_OS_MAC since it's already defined in AEConfig.h
-        __MACH__=1                   # macOS identifier
-        AEGP_PLUGIN=1                # This is an AEGP plugin
-        AE_PLUGIN_SUPPORT_PANELS=0   # Explicitly disable panel support
+        AEGP_PLUGIN=1
+        AE_PLUGIN_SUPPORT_PANELS=0
     )
-    
-    # macOS-specific compiler flags
+
     target_compile_options(PathLink PRIVATE
         -Wno-deprecated-declarations
         -fvisibility=hidden
-        -Wno-pragma-pack          # Suppress pragma pack warnings
-        -Wno-unknown-pragmas      # Suppress unknown pragma warnings
-        -Wno-macro-redefined      # Suppress macro redefinition warnings
-        -Wno-nonportable-include-path  # Suppress case-sensitive path warnings
-        -Wno-undefined-var-template    # Suppress panel suite template warnings
-        -Wno-null-conversion      # Suppress NULL to int conversion warnings
-        -fobjc-arc                # Enable ARC for Objective-C++ files
-    )
-    
-elseif(WIN32)
-    add_library(PathLink SHARED ${SOURCES})
-    set_target_properties(PathLink PROPERTIES SUFFIX ".aex")
-    target_link_libraries(PathLink shell32 user32)
-    target_compile_definitions(PathLink PRIVATE
-        WIN_ENV=1
-        _WINDOWS=1
-        MSWindows=1
+        -Wno-pragma-pack
+        -Wno-unknown-pragmas
+        -Wno-macro-redefined
+        -Wno-nonportable-include-path
+        -Wno-undefined-var-template
+        -Wno-null-conversion
+        -fobjc-arc
     )
 endif()
