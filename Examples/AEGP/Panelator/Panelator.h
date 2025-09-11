@@ -15,7 +15,12 @@
 #include "AE_EffectSuites.h"
 #include "PT_Err.h"
 #include <string>
+
+#ifdef WIN32
 #include "PanelatorUI_Plat.h"
+#elif defined(__APPLE__)
+
+#endif
 
 // Forward declarations
 class PanelatorUI;
