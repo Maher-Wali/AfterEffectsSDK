@@ -83,11 +83,14 @@ jobs:
       run: |
         PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
         if [ -n "$PLUGIN_PATH" ]; then
-            zip -r $GITHUB_WORKSPACE/PathLink-macOS.zip "$PLUGIN_PATH"
+            cd "$(dirname "$PLUGIN_PATH")"
+            zip -r "$GITHUB_WORKSPACE/PathLink-macOS.zip" "$(basename "$PLUGIN_PATH")"
         else
             echo "No plugin found!"
             exit 1
         fi
+
+
 
     - name: Upload plugin
       uses: actions/upload-artifact@v4
