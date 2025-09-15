@@ -53,6 +53,12 @@ if(APPLE)
     set(CMAKE_CXX_COMPILE_OBJECT "${CMAKE_OBJCXX_COMPILE_OBJECT}")
 endif()
 
+if(APPLE)
+    # Build universal binary with Intel + Apple Silicon
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
+endif()
+
+
 # --- Include directories ---
 # Note: Order matters! AE SDK headers should come first
 
