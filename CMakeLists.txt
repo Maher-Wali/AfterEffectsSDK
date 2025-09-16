@@ -132,7 +132,7 @@ endif()
 if(APPLE)
     # Add SuiteHandler.cpp from AE SDK Util
     list(APPEND SOURCES
-        ${CMAKE_SOURCE_DIR}/Examples/Util/SuiteHandler.cpp
+        ${CMAKE_SOURCE_DIR}/Examples/Util/AEGP_SuiteHandler.cpp
     )
     add_library(AEPathLink MODULE ${SOURCES})
 
