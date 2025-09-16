@@ -130,12 +130,11 @@ endif()
 
 # --- Create plugin target ---
 if(APPLE)
-    add_library(AEPathLink MODULE ${SOURCES})
-
     # Add SuiteHandler.cpp from AE SDK Util
     list(APPEND SOURCES
         ${CMAKE_SOURCE_DIR}/Examples/Util/SuiteHandler.cpp
     )
+    add_library(AEPathLink MODULE ${SOURCES})
 
     # CRITICAL: Set all source files to be compiled as Objective-C++
     set_source_files_properties(${SOURCES} PROPERTIES
@@ -146,7 +145,7 @@ if(APPLE)
     set_target_properties(AEPathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
-        MACOSX_BUNDLE_INFO_PLIST ${PANELATOR_SOURCE_DIR}/Info.plist.in
+        MACOSX_BUNDLE_INFO_PLIST ${PANELATOR_SOURCE_DIR}/Info.plist
         MACOSX_BUNDLE_BUNDLE_NAME "AEPathLink"
         MACOSX_BUNDLE_IDENTIFIER "com.yourcompany.aepathlink"
         MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0"
