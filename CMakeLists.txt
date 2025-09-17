@@ -185,10 +185,11 @@ if(APPLE)
         -fobjc-arc
     )
 
-    # Ensure Resources folder exists
+    # Ensure plugin bundle exists before creating PkgInfo
     add_custom_command(TARGET AEPathLink POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
-        COMMENT "Ensuring Resources directory exists"
+        COMMENT "Ensuring plugin bundle and Resources directory exist"
     )
 
     add_custom_command(
@@ -206,9 +207,8 @@ if(APPLE)
     )
     add_dependencies(AEPathLink PiPL)
 
-    # Create PkgInfo file
+    # Create PkgInfo
     add_custom_command(TARGET AEPathLink POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND /bin/sh -c "echo -n 'AEmwPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
         COMMENT "Creating PkgInfo for AEPathLink.plugin"
     )
