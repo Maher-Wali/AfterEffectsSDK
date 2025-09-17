@@ -187,7 +187,7 @@ if(APPLE)
 
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        COMMAND Rez ${PANELATOR_SOURCE_DIR}/Mac/Panelator_PiPL.r -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+        COMMAND Rez ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
         DEPENDS ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r
         COMMENT "Compiling PiPL resource"
     )
