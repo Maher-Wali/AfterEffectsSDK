@@ -185,6 +185,12 @@ if(APPLE)
         -fobjc-arc
     )
 
+    # Ensure Resources folder exists
+    add_custom_command(TARGET AEPathLink POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
+        COMMENT "Ensuring Resources directory exists"
+    )
+
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
         COMMAND Rez ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
@@ -200,7 +206,7 @@ if(APPLE)
     )
     add_dependencies(AEPathLink PiPL)
 
-    # --- Generate PkgInfo inside bundle ---
+    # Create PkgInfo file
     add_custom_command(TARGET AEPathLink POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND /bin/sh -c "echo -n 'AEmwPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
