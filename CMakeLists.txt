@@ -45,7 +45,7 @@ endif()
 
 # --- macOS-specific settings ---
 if(APPLE)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET "10.13")
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "12.0")
     enable_language(OBJCXX)
     set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
     
