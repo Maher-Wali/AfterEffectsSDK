@@ -179,7 +179,7 @@ if(APPLE)
         -Wno-pragma-pack
         -Wno-unknown-pragmas
         -Wno-macro-redefined
-        -Wno-nonportable-include-path
+        -Wno-nonportable-include-paths
         -Wno-undefined-var-template
         -Wno-null-conversion
         -fobjc-arc
@@ -188,7 +188,7 @@ if(APPLE)
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
         COMMAND Rez ${PANELATOR_SOURCE_DIR}/Mac/Panelator_PiPL.r -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        DEPENDS ${PANELATOR_SOURCE_DIR}/Mac/Panelator_PiPL.r
+        DEPENDS ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r
         COMMENT "Compiling PiPL resource"
     )
 
