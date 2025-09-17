@@ -75,7 +75,7 @@ jobs:
             find "$PLUGIN_PATH" -type f -exec ls -la {} \;
 
             echo "Executable dependencies:"
-            find "$PLUGIN_PATH" -name "PathLink" -exec otool -L {} \; || true
+            find "$PLUGIN_PATH" -name "AEPathLink" -exec otool -L {} \; || true
         fi
 
     - name: Package for distribution
