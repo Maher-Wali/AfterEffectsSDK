@@ -142,6 +142,16 @@ if(APPLE)
         COMPILE_FLAGS "-x objective-c++ -fobjc-arc"
     )
 
+    # Define bundle vars for Info.plist substitution
+    set(MACOSX_BUNDLE_EXECUTABLE_NAME "AEPathLink")
+    set(MACOSX_BUNDLE_BUNDLE_NAME "AEPathLink")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0.0")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
+    set(MACOSX_BUNDLE_IDENTIFIER "com.yourcompany.aepathlink")  # Customize as needed
+
+    # Generate Info.plist from template
+    configure_file(${PANELATOR_SOURCE_DIR}/Info.plist.in ${CMAKE_CURRENT_BINARY_DIR}/Info.plist @ONLY)
+
     set_target_properties(AEPathLink PROPERTIES
         BUNDLE TRUE
         BUNDLE_EXTENSION "plugin"
@@ -202,15 +212,11 @@ if(APPLE)
     add_custom_target(PiPL ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc)
 
     add_custom_command(TARGET AEPathLink POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-    )
-    add_dependencies(AEPathLink PiPL)
-
-    # Create PkgInfo
-    add_custom_command(TARGET AEPathLink POST_BUILD
         COMMAND /bin/sh -c "echo -n 'AEmwPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
-        COMMENT "Creating PkgInfo for AEPathLink.plugin"
+        COMMENT "Setting up bundle: dirs, .rsrc, and PkgInfo"
     )
 
 endif()

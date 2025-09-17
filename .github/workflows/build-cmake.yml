@@ -31,19 +31,19 @@ jobs:
             <key>CFBundleDevelopmentRegion</key>
             <string>en</string>
             <key>CFBundleExecutable</key>
-            <string>\${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
+            <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
             <key>CFBundleIdentifier</key>
-            <string>\${MACOSX_BUNDLE_IDENTIFIER}</string>
+            <string>${MACOSX_BUNDLE_IDENTIFIER}</string>
             <key>CFBundleInfoDictionaryVersion</key>
             <string>6.0</string>
             <key>CFBundleName</key>
-            <string>\${MACOSX_BUNDLE_BUNDLE_NAME}</string>
+            <string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
             <key>CFBundlePackageType</key>
             <string>BNDL</string>
             <key>CFBundleShortVersionString</key>
-            <string>\${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+            <string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
             <key>CFBundleVersion</key>
-            <string>\${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
+            <string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
             <key>CSResourcesFileMapped</key>
             <true/>
             <key>LSMinimumSystemVersion</key>
@@ -61,6 +61,25 @@ jobs:
     - name: Build plugin
       working-directory: build
       run: cmake --build . --config Release
+
+    - name: Verify PkgInfo
+      working-directory: build
+      run: |
+        PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
+        if [ -n "$PLUGIN_PATH" ]; then
+          PKGINFO_PATH="$PLUGIN_PATH/Contents/PkgInfo"
+          if [ -f "$PKGINFO_PATH" ]; then
+            echo "✅ PkgInfo present at $PKGINFO_PATH"
+            echo "Contents (hex):"
+            xxd "$PKGINFO_PATH"
+            echo "Contents (string):"
+            cat -v "$PKGINFO_PATH"
+          else
+            echo "❌ PkgInfo NOT FOUND at $PKGINFO_PATH"
+            find "$PLUGIN_PATH/Contents" -type f -ls  # List all Contents files for debug
+            exit 1
+          fi
+        fi
 
     - name: Verify build
       working-directory: build
