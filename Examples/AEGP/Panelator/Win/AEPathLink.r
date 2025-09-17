@@ -1,11 +1,10 @@
-#include "AE_General.r"
+#include "AE_Effect.r"
 
-resource 'PiPL' (16000) {
-    {
-        Name { "AEPathLink" },
-        Category { "General Plugin" },
-        AE_Effect_Match_Name { "MIB8" },
-        AE_Effect_Version { 1 },
-        AE_Effect_EntryPoint { "EntryPointFunc" }
-    }
+resource 'PiPL' (16000)
+{
+    name = "AEPathLink";
+    category = "General Plugin";
+    id = 'dnik';
+    entry_point = "EntryPointFunc";
+    version = 1;
 };
