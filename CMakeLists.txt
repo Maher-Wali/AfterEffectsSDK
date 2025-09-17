@@ -202,6 +202,11 @@ if(APPLE)
         COMMENT "Ensuring plugin bundle and Resources directory exist"
     )
 
+    # Verify PiPL resource file exists
+    if(NOT EXISTS "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
+        message(FATAL_ERROR "PiPL resource file not found at: ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
+    endif()
+
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
         COMMAND Rez ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
@@ -211,12 +216,13 @@ if(APPLE)
 
     add_custom_target(PiPL ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc)
 
+    # Bundle setup: dirs, .rsrc, PkgInfo
     add_custom_command(TARGET AEPathLink POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
         COMMAND /bin/sh -c "echo -n 'AEmwPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
-        COMMENT "Setting up bundle: dirs, .rsrc, and PkgInfo"
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+        COMMENT "Setting up bundle: Resources dir, .rsrc, and PkgInfo"
     )
 
 endif()

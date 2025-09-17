@@ -20,6 +20,14 @@ jobs:
       with:
         xcode-version: latest-stable
 
+    - name: Verify Rez tool
+      run: |
+        if ! command -v Rez; then
+          echo "❌ Rez tool not found! Installing Xcode command-line tools..."
+          xcode-select --install || true  # Ignore if already installed
+        fi
+        Rez --version || { echo "❌ Rez not available"; exit 1; }
+
     - name: Create Info.plist template
       run: |
         mkdir -p Examples/AEGP/Panelator
