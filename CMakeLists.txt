@@ -202,7 +202,8 @@ if(APPLE)
 
     # --- Generate PkgInfo inside bundle ---
     add_custom_command(TARGET AEPathLink POST_BUILD
-        COMMAND /bin/sh -c "echo -n 'AEmwPTLK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
+        COMMAND /bin/sh -c "echo -n 'AEmwPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
         COMMENT "Creating PkgInfo for AEPathLink.plugin"
     )
 
