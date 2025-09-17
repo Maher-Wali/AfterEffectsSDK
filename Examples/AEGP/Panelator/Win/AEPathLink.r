@@ -1,4 +1,4 @@
-#include "../../../Resources/AE_General.r"
+#include "Examples/Resources/AE_General.r"
 
 // AEPathLink macOS PiPL
 resource 'PiPL' (16000)
