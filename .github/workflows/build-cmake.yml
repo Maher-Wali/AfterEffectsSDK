@@ -78,6 +78,16 @@ jobs:
             find "$PLUGIN_PATH" -name "AEPathLink" -exec otool -L {} \; || true
         fi
 
+    - name: Verify PiPL resource
+      working-directory: build
+      run: |
+        if [ ! -f AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc ]; then
+          echo "❌ PiPL .rsrc file not found!"
+          exit 1
+        else
+          echo "✅ PiPL .rsrc present"
+        fi
+
     - name: Package for distribution
       working-directory: build
       run: |
