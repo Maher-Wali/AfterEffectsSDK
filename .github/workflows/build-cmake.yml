@@ -108,6 +108,28 @@ jobs:
             find "$PLUGIN_PATH" -name "AEPathLink" -exec otool -L {} \; || true
         fi
 
+    - name: Debug PiPL resource
+      run: |
+        echo "Checking for AEPathLink.r:"
+        find Examples/AEGP/Panelator -name "AEPathLink.r" -ls
+        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ]; then
+          echo "Contents of AEPathLink.r:"
+          cat Examples/AEGP/Panelator/Win/AEPathLink.r
+          echo "Checking for AEConfig.h and AE_General.r:"
+          find Examples/Headers -name "AEConfig.h" -ls
+          find Examples/Resources -name "AE_General.r" -ls
+          echo "Attempting to run Rez manually:"
+          Rez -i Examples/Headers -i Examples/Resources Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc || {
+            echo "❌ Rez command failed"
+            exit 1
+          }
+          ls -l build/AEPathLink.rsrc
+        else
+          echo "❌ AEPathLink.r not found"
+          exit 1
+        fi
+        echo "Checking build dir for AEPathLink.rsrc:"
+        find build -name "AEPathLink.rsrc" -ls
     - name: Verify PiPL resource
       working-directory: build
       run: |

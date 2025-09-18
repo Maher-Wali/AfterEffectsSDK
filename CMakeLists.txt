@@ -195,32 +195,28 @@ if(APPLE)
         -fobjc-arc
     )
 
-    # Ensure plugin bundle exists before creating PkgInfo
-    add_custom_command(TARGET AEPathLink POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
-        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
-        COMMENT "Ensuring plugin bundle and Resources directory exist"
-    )
+    # Define PiPL resource path
+    set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
 
     # Verify PiPL resource file exists
-    if(NOT EXISTS "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
-        message(FATAL_ERROR "PiPL resource file not found at: ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
+    if(NOT EXISTS "${PIPL_RESOURCE}")
+        message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
     endif()
 
+    # Compile PiPL resource
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        COMMAND Rez ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        DEPENDS ${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r
-        COMMENT "Compiling PiPL resource"
+        COMMAND Rez -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+        DEPENDS ${PIPL_RESOURCE}
+        COMMENT "Compiling PiPL resource with Rez"
+        VERBATIM
     )
-
-    add_custom_target(PiPL ALL DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc)
 
     # Bundle setup: dirs, .rsrc, PkgInfo
     add_custom_command(TARGET AEPathLink POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-        COMMAND /bin/sh -c "echo -n 'AEmwPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
+        COMMAND /bin/sh -c "echo -n 'BNDLPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
         COMMENT "Setting up bundle: Resources dir, .rsrc, and PkgInfo"
     )
