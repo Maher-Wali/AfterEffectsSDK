@@ -82,10 +82,14 @@ jobs:
           echo "Listing include paths:"
           ls -la Examples/Headers Examples/Resources
           echo "Attempting to run Rez manually:"
-          Rez -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/ -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc 2> build/rez_error.log
+          Rez -useDF -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/ -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
           if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
             echo "✅ Rez succeeded, AEPathLink.rsrc created:"
             ls -l build/AEPathLink.rsrc
+            echo "Rez stdout:"
+            cat build/rez_stdout.log
+            echo "Rez stderr (if any):"
+            cat build/rez_stderr.log
             echo "DeRez output:"
             DeRez build/AEPathLink.rsrc 2> build/derez_error.log || {
               echo "⚠️ DeRez failed"
@@ -95,7 +99,8 @@ jobs:
             }
           else
             echo "❌ Rez failed or AEPathLink.rsrc is empty"
-            cat build/rez_error.log
+            cat build/rez_stdout.log
+            cat build/rez_stderr.log
             ls -l build/AEPathLink.rsrc || echo "File missing"
             exit 1
           fi
@@ -174,14 +179,14 @@ jobs:
             echo "❌ PkgInfo size incorrect: $PKGINFO_SIZE bytes"
             exit 1
           fi
-          echo "RSRC size:"
+          echo "RSRC size in bundle:"
           ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || { echo "❌ RSRC missing"; exit 1; }
           RSRC_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc")
           if [ "$RSRC_SIZE" -gt 0 ]; then
             echo "✅ RSRC size: $RSRC_SIZE bytes"
-            DeRez "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || echo "⚠️ DeRez failed"
+            DeRez "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || echo "⚠️ DeRez failed on bundle RSRC"
           else
-            echo "❌ RSRC empty"
+            echo "❌ RSRC empty in bundle"
             exit 1
           fi
           echo "Info.plist validation:"

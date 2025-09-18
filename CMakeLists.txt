@@ -197,12 +197,12 @@ if(APPLE)
 
     # Define PiPL resource path
     set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
-    
+
     # Verify PiPL resource file exists
     if(NOT EXISTS "${PIPL_RESOURCE}")
         message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
     endif()
-    
+
     # Verify include files
     set(AE_CONFIG_HEADER "${CMAKE_SOURCE_DIR}/Examples/Headers/AEConfig.h")
     set(AE_GENERAL_RESOURCE "${CMAKE_SOURCE_DIR}/Examples/Resources/AE_General.r")
@@ -212,17 +212,17 @@ if(APPLE)
     if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
         message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
     endif()
-    
-    # Compile PiPL resource with error capture
+
+    # Compile PiPL resource
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        COMMAND Rez -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_error.log
-        COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_error.log && exit 1)
+        COMMAND Rez -useDF -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
+        COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
         DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
-        COMMENT "Compiling PiPL resource with Rez"
+        COMMENT "Compiling PiPL resource with Rez (using data fork)"
         VERBATIM
     )
-    
+
     # Bundle setup
     add_custom_command(TARGET AEPathLink POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
