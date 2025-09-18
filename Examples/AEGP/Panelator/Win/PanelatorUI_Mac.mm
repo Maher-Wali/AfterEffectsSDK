@@ -37,7 +37,7 @@ const int BtnSendToAI = 1002;
     // Create Get button
     NSButton* getButton = [[NSButton alloc] initWithFrame:NSMakeRect(10, 10, 80, 30)];
     [getButton setTitle:@"Get"];
-    [getButton setButtonType:0];
+    [getButton setButtonType:(NSButtonType)0];
     [getButton setTarget:self];
     [getButton setAction:@selector(getButtonClicked:)];
     [getButton setTag:BtnGetFromAI];
@@ -56,7 +56,7 @@ const int BtnSendToAI = 1002;
     // Create Send button
     NSButton* sendButton = [[NSButton alloc] initWithFrame:NSMakeRect(100, 10, 80, 30)];
     [sendButton setTitle:@"Send"];
-    [sendButton setButtonType:0];
+    [sendButton setButtonType:(NSButtonType)0];
     [sendButton setTarget:self];
     [sendButton setAction:@selector(sendButtonClicked:)];
     [sendButton setTag:BtnSendToAI];
