@@ -71,15 +71,17 @@ jobs:
 
     - name: Debug PiPL resource
       run: |
-        echo "Checking for AEPathLink.r:"
+        echo "Checking for AEPathLink.r, AEConfig.h, and AE_General.r:"
         find Examples/AEGP/Panelator -name "AEPathLink.r" -ls
-        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ]; then
+        find Examples/Headers -name "AEConfig.h" -ls
+        find Examples/Resources -name "AE_General.r" -ls
+        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ] && [ -f "Examples/Headers/AEConfig.h" ] && [ -f "Examples/Resources/AE_General.r" ]; then
           echo "Contents of AEPathLink.r:"
           cat Examples/AEGP/Panelator/Win/AEPathLink.r
-          echo "Checking for Types.r:"
-          ls -la /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/
+          echo "Contents of AE_General.r (first 20 lines):"
+          cat Examples/Resources/AE_General.r | head -n 20
           echo "Attempting to run Rez manually:"
-          Rez -useDF -d DEBUG=1 -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/ -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
+          Rez -useDF -d DEBUG=1 -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
           if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
             echo "✅ Rez succeeded, AEPathLink.rsrc created:"
             ls -l build/AEPathLink.rsrc
@@ -103,7 +105,7 @@ jobs:
             exit 1
           fi
         else
-          echo "❌ AEPathLink.r not found"
+          echo "❌ AEPathLink.r, AEConfig.h, or AE_General.r not found"
           exit 1
         fi
 
