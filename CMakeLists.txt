@@ -221,10 +221,11 @@ add_custom_command(TARGET AEPathLink POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources"
 
     # Rez produces the resource file in build dir
-    COMMAND xcrun rez "${RSRC_INPUT}" -useDF
+    COMMAND Rez -useDF -d DEBUG=1
         -i "${CMAKE_SOURCE_DIR}/Examples/Headers"
         -i "${CMAKE_SOURCE_DIR}/Examples/Resources"
         -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+        "${RSRC_INPUT}"
         -o "${RSRC_BUILD_OUTPUT}"
 
     # Copy from build dir into the bundle
