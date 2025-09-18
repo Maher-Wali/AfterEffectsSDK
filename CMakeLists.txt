@@ -211,18 +211,23 @@ if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
     message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
 endif()
 
-# Compile PiPL resource
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMAND Rez -useDF -d DEBUG=1 -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
-    COMMAND sync
-    COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
+    COMMAND Rez -useDF -d DEBUG=1
+        -i "${CMAKE_SOURCE_DIR}/Examples/Headers"
+        -i "${CMAKE_SOURCE_DIR}/Examples/Resources"
+        -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+        ${PIPL_RESOURCE}
+        -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+        > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
+    COMMAND ${CMAKE_COMMAND} -E size ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
     COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
     COMMAND xxd ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc | head -20 > ${CMAKE_CURRENT_BINARY_DIR}/rsrc_hexdump.log
     DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
     COMMENT "Compiling PiPL resource with Rez (using data fork)"
     VERBATIM
 )
+
 
 # 🔹 FIX: Make plugin depend on the resource
 add_custom_target(AEPathLink_rsrc DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc)
