@@ -224,11 +224,14 @@ if(APPLE)
     
     # Bundle setup: dirs, .rsrc, PkgInfo
     add_custom_command(TARGET AEPathLink POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-        COMMAND /bin/sh -c "echo -n 'BNDLPLTK' > $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
+        COMMAND ${CMAKE_COMMAND} -E echo "BNDLplug" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
+        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        COMMENT "Setting up bundle: Resources dir, .rsrc, and PkgInfo"
+        COMMENT "Setting up bundle: dirs, .rsrc, and PkgInfo"
     )
 
 endif()

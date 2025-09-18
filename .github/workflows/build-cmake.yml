@@ -111,7 +111,15 @@ jobs:
       run: |
         PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
         if [ -n "$PLUGIN_PATH" ]; then
-          PKGINFO_PATH="$PLUGIN_PATH/Contents/PkgInfo"
+          CONTENTS_PATH="$PLUGIN_PATH/Contents"
+          PKGINFO_PATH="$CONTENTS_PATH/PkgInfo"
+          if [ -d "$CONTENTS_PATH" ]; then
+            echo "✅ Contents dir exists"
+          else
+            echo "❌ Contents dir missing"
+            find "$PLUGIN_PATH" -ls
+            exit 1
+          fi
           if [ -f "$PKGINFO_PATH" ]; then
             echo "✅ PkgInfo present at $PKGINFO_PATH"
             echo "Contents (hex):"
@@ -120,10 +128,16 @@ jobs:
             cat -v "$PKGINFO_PATH"
           else
             echo "❌ PkgInfo NOT FOUND at $PKGINFO_PATH"
-            find "$PLUGIN_PATH/Contents" -type f -ls  # List all Contents files for debug
+            find "$CONTENTS_PATH" -type f -ls  # List all Contents files for debug
             exit 1
           fi
-        fi
+          echo "Full bundle structure:"
+          find "$PLUGIN_PATH" -type d -ls
+          find "$PLUGIN_PATH" -type f -ls
+        else
+          echo "❌ No plugin bundle found"
+          exit 1
+      fi
 
     - name: Verify build
       working-directory: build
@@ -141,6 +155,24 @@ jobs:
             find "$PLUGIN_PATH" -name "AEPathLink" -exec otool -L {} \; || true
         fi
 
+    - name: Verify Bundle Structure
+      working-directory: build
+      run: |
+        PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
+        if [ -n "$PLUGIN_PATH" ]; then
+          echo "✅ Bundle exists: $PLUGIN_PATH"
+          echo "Full bundle tree:"
+          find "$PLUGIN_PATH" -type f -ls
+          echo "PkgInfo contents (hex):"
+          xxd "$PLUGIN_PATH/Contents/PkgInfo" || echo "❌ PkgInfo missing or invalid"
+          echo "RSRC exists and size:"
+          ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || echo "❌ RSRC missing"
+          echo "Info.plist exists:"
+          ls -l "$PLUGIN_PATH/Contents/Info.plist" || echo "❌ Info.plist missing"
+        else
+          echo "❌ No plugin bundle found"
+          exit 1
+        fi
     
     - name: Verify PiPL resource
       working-directory: build
