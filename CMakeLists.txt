@@ -224,6 +224,13 @@ add_custom_command(
     VERBATIM
 )
 
+# Define bundle vars for Info.plist substitution
+set(MACOSX_BUNDLE_EXECUTABLE_NAME "AEPathLink")
+set(MACOSX_BUNDLE_BUNDLE_NAME "AEPathLink")
+set(MACOSX_BUNDLE_IDENTIFIER "com.example.AEPathLink")
+set(MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0")
+set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
+
 # Generate Info.plist
 configure_file(
     ${PANELATOR_SOURCE_DIR}/Info.plist.in
@@ -234,11 +241,6 @@ configure_file(
 # Set compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations -fvisibility=hidden -Wno-pragma-pack -Wno-unknown-pragmas -Wno-nonportable-include-path -Wno-undefined-var-template -Wno-null-conversion")
 set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
-
-# Add .rsrc as bundle resource
-set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc PROPERTIES
-    MACOSX_PACKAGE_LOCATION "Resources"
-)
 
 # Bundle properties
 set_target_properties(AEPathLink PROPERTIES
@@ -252,13 +254,15 @@ set_target_properties(AEPathLink PROPERTIES
     MACOSX_BUNDLE_BUNDLE_VERSION "1"
 )
 
-# Bundle setup (PkgInfo only)
+# Bundle setup (PkgInfo and .rsrc)
 add_custom_command(TARGET AEPathLink POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
     COMMAND printf "AEgp????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
-    COMMENT "Setting up bundle: PkgInfo"
+    COMMENT "Setting up bundle: PkgInfo and .rsrc"
     VERBATIM
 )
 
