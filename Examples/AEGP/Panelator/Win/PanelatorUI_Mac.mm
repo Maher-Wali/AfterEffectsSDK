@@ -36,22 +36,18 @@ const int BtnSendToAI = 1002;
 - (void)setupUI {
     // Create Get button
     NSButton* getButton = [[NSButton alloc] initWithFrame:NSMakeRect(10, 10, 80, 30)];
-    [getButton setTitle:@"Get"];
-    [getButton setButtonType:(NSButtonType)0];
-    [getButton setTarget:self];
-    [getButton setAction:@selector(getButtonClicked:)];
-    [getButton setTag:BtnGetFromAI];
-    
-    // Style the Get button
+    [getButton setButtonType:NSButtonTypeMomentaryPushIn]; // standard button
+    [getButton setBezelStyle:NSBezelStyleRounded];         // rounded bezel
+    [getButton setTitle:@"Get"];                           // regular title
+    [getButton setFont:[NSFont systemFontOfSize:12]];      // text size
     [getButton setWantsLayer:YES];
-    getButton.layer.backgroundColor = [NSColor colorWithRed:0.35 green:0.35 blue:0.35 alpha:1.0].CGColor;
-    getButton.layer.cornerRadius = 4.0;
+    getButton.layer.backgroundColor = [NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.0].CGColor; // gray
     [getButton setAttributedTitle:[[NSAttributedString alloc] 
         initWithString:@"Get" 
-        attributes:@{
-            NSForegroundColorAttributeName: [NSColor whiteColor],
-            NSFontAttributeName: [NSFont systemFontOfSize:12]
-        }]];
+        attributes:@{NSForegroundColorAttributeName: [NSColor whiteColor]}]];
+    
+    [getButton setTarget:self];
+    [getButton setAction:@selector(getButtonClicked:)];
     
     // Create Send button
     NSButton* sendButton = [[NSButton alloc] initWithFrame:NSMakeRect(100, 10, 80, 30)];
