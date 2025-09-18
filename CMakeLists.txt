@@ -198,30 +198,27 @@ if(APPLE)
     # Define PiPL resource path
 set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
 
-# Verify input files
-if(NOT EXISTS "${PIPL_RESOURCE}")
-    message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
-endif()
-set(AE_CONFIG_HEADER "${CMAKE_SOURCE_DIR}/Examples/Headers/AEConfig.h")
-set(AE_GENERAL_RESOURCE "${CMAKE_SOURCE_DIR}/Examples/Resources/AE_General.r")
-if(NOT EXISTS "${AE_CONFIG_HEADER}")
-    message(FATAL_ERROR "AEConfig.h not found at: ${AE_CONFIG_HEADER}")
-endif()
-if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
-    message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
-endif()
-
-# Compile PiPL resource
+# --- Compile PiPL resource ---
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMAND Rez -useDF -d DEBUG=1 -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
-    COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty or missing after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
-    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMAND xxd ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc | head -20 > ${CMAKE_CURRENT_BINARY_DIR}/rsrc_hexdump.log
+    COMMAND Rez -useDF -d DEBUG=1
+        -i "${CMAKE_SOURCE_DIR}/Examples/Headers"
+        -i "${CMAKE_SOURCE_DIR}/Examples/Resources"
+        -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+        ${PIPL_RESOURCE}
+        -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
     DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
     COMMENT "Compiling PiPL resource with Rez (using data fork)"
     VERBATIM
 )
+
+# Create a custom target for the resource
+add_custom_target(PiPLResource ALL
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+)
+
+# Ensure plugin depends on the resource
+add_dependencies(AEPathLink PiPLResource)
 
 # Set compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations -fvisibility=hidden -Wno-pragma-pack -Wno-unknown-pragmas -Wno-nonportable-include-path -Wno-undefined-var-template -Wno-null-conversion")
