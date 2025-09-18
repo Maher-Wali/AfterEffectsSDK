@@ -211,27 +211,35 @@ if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
     message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
 endif()
 
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMAND Rez -useDF -d DEBUG=1
+# --- Compile .r resource file into .rsrc (build-dir then copy into bundle) ---
+set(RSRC_INPUT "${CMAKE_SOURCE_DIR}/Examples/Resources/AEPathLink.r")
+set(RSRC_BUILD_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc")
+set(RSRC_BUNDLE_OUTPUT "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc")
+
+add_custom_command(TARGET AEPathLink POST_BUILD
+    # Ensure bundle Resources dir exists
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources"
+
+    # Rez produces the resource file in build dir
+    COMMAND xcrun rez "${RSRC_INPUT}" -useDF
         -i "${CMAKE_SOURCE_DIR}/Examples/Headers"
         -i "${CMAKE_SOURCE_DIR}/Examples/Resources"
         -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
-        ${PIPL_RESOURCE}
-        -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
-    COMMAND ${CMAKE_COMMAND} -E size ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMAND xxd ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc | head -20 > ${CMAKE_CURRENT_BINARY_DIR}/rsrc_hexdump.log
-    DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
-    COMMENT "Compiling PiPL resource with Rez (using data fork)"
-    VERBATIM
+        -o "${RSRC_BUILD_OUTPUT}"
+
+    # Copy from build dir into the bundle
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different "${RSRC_BUILD_OUTPUT}" "${RSRC_BUNDLE_OUTPUT}"
+
+    # Show attributes and sizes for debug
+    COMMAND ${CMAKE_COMMAND} -E echo "RSRC build output: ${RSRC_BUILD_OUTPUT}"
+    COMMAND ${CMAKE_COMMAND} -E echo "RSRC bundle output: ${RSRC_BUNDLE_OUTPUT}"
+    COMMAND ls -l "${RSRC_BUILD_OUTPUT}"
+    COMMAND ${CMAKE_COMMAND} -E size "${RSRC_BUILD_OUTPUT}"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Compiling AEPathLink.r into flat AEPathLink.rsrc"
 )
 
-
-# 🔹 FIX: Make plugin depend on the resource
-add_custom_target(AEPathLink_rsrc DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc)
-add_dependencies(AEPathLink AEPathLink_rsrc)
 
 # Define bundle vars for Info.plist substitution
 set(MACOSX_BUNDLE_EXECUTABLE_NAME "AEPathLink")
