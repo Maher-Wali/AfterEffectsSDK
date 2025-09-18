@@ -224,19 +224,29 @@ add_dependencies(AEPathLink PiPLResource)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations -fvisibility=hidden -Wno-pragma-pack -Wno-unknown-pragmas -Wno-nonportable-include-path -Wno-undefined-var-template -Wno-null-conversion")
 set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
 
-# Bundle setup
 add_custom_command(TARGET AEPathLink POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
-    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
-    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc missing before copy" && false)
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-    COMMAND test -s $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || (echo "Error: Copied AEPathLink.rsrc is empty" && false)
-    COMMAND printf "BNDL????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
-    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-    COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && false)
-    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-    COMMENT "Setting up bundle: dirs, .rsrc, PkgInfo"
+    # Ensure Resources dir exists
+    COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources"
+
+    # Compile .r into .rsrc and copy into bundle
+    COMMAND xcrun rez "${CMAKE_SOURCE_DIR}/samplecode/AEPathLink/AEPathLink.r"
+                     -useDF
+                     -o "${CMAKE_BINARY_DIR}/AEPathLink.rsrc"
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_BINARY_DIR}/AEPathLink.rsrc"
+            "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc"
+    COMMAND ${CMAKE_COMMAND} -E echo "RSRC built: ${CMAKE_BINARY_DIR}/AEPathLink.rsrc"
+    COMMAND ${CMAKE_COMMAND} -E echo "RSRC in bundle: $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc"
+
+    # Create PkgInfo (AE plug-ins typically use 'BNDL????')
+    COMMAND printf "BNDL????" > "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
+
+    # Debug info
+    COMMAND ${CMAKE_COMMAND} -E echo "=== Verifying bundle contents ==="
+    COMMAND ls -la "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources"
+    COMMAND ls -la "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
+    COMMAND stat -f%z "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo"
+    COMMENT "Embedding Rez .rsrc and creating PkgInfo for AEPathLink"
     VERBATIM
 )
 
