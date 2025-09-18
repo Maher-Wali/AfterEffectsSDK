@@ -283,7 +283,7 @@ add_custom_command(TARGET AEPathLink POST_BUILD
     COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || echo "Error: AEPathLink.rsrc missing before copy"
     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || echo "Error: cp failed for AEPathLink.rsrc"
     COMMAND ls -l $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || echo "Error: AEPathLink.rsrc missing after copy"
-    COMMAND printf "AEgp????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
+    COMMAND printf "AEgpFXTC" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
