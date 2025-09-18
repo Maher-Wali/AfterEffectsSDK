@@ -9,7 +9,7 @@ resource 'PiPL' (16000, "AEPathLink", purgeable) {
         Version { 196608 },
         CodeMacIntel64 { "EntryPointFunc" },
         CodeMacARM64 { "EntryPointFunc" },
-        Creator 'PLTK',
+        Creator { "PLTK" },
         AE_PiPL_Version { 2, 0 },
         AE_Effect_Spec_Version { 13, 8 },
         AE_Effect_Version { 1 },
