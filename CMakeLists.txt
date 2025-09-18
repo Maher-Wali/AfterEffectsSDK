@@ -211,35 +211,40 @@ if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
     message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
 endif()
 
-# --- Compile .r resource file into .rsrc (build-dir then copy into bundle) ---
-set(RSRC_INPUT "${CMAKE_SOURCE_DIR}/Examples/Resources/AEPathLink.r")
+# Absolute paths to all important files
+set(RSRC_INPUT "${CMAKE_SOURCE_DIR}/Examples/AEGP/Panelator/Win/AEPathLink.r")
 set(RSRC_BUILD_OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc")
 set(RSRC_BUNDLE_OUTPUT "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc")
+set(HEADERS_DIR "${CMAKE_SOURCE_DIR}/Examples/Headers")
+set(RESOURCES_DIR "${CMAKE_SOURCE_DIR}/Examples/Resources")
+set(SDK_INCLUDE "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/")
 
 add_custom_command(TARGET AEPathLink POST_BUILD
     # Ensure bundle Resources dir exists
     COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources"
 
-    # Rez produces the resource file in build dir
-    COMMAND Rez -useDF -d DEBUG=1
-        -i "${CMAKE_SOURCE_DIR}/Examples/Headers"
-        -i "${CMAKE_SOURCE_DIR}/Examples/Resources"
-        -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/"
+    # Run Rez with absolute paths
+    COMMAND xcrun Rez -useDF -d DEBUG=1
+        -i "${HEADERS_DIR}"
+        -i "${RESOURCES_DIR}"
+        -i "${SDK_INCLUDE}"
         "${RSRC_INPUT}"
         -o "${RSRC_BUILD_OUTPUT}"
+        > "${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log"
+        2> "${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log"
 
-    # Copy from build dir into the bundle
+    # Copy generated .rsrc into bundle
     COMMAND ${CMAKE_COMMAND} -E copy_if_different "${RSRC_BUILD_OUTPUT}" "${RSRC_BUNDLE_OUTPUT}"
 
-    # Show attributes and sizes for debug
+    # Debug: show outputs
     COMMAND ${CMAKE_COMMAND} -E echo "RSRC build output: ${RSRC_BUILD_OUTPUT}"
     COMMAND ${CMAKE_COMMAND} -E echo "RSRC bundle output: ${RSRC_BUNDLE_OUTPUT}"
     COMMAND ls -l "${RSRC_BUILD_OUTPUT}"
-    COMMAND ${CMAKE_COMMAND} -E size "${RSRC_BUILD_OUTPUT}"
 
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Compiling AEPathLink.r into flat AEPathLink.rsrc"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+    COMMENT "Compiling AEPathLink.r into flat AEPathLink.rsrc with absolute paths"
 )
+
 
 
 # Define bundle vars for Info.plist substitution
