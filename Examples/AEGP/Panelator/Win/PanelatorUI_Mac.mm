@@ -135,7 +135,6 @@ void PanelatorUI_Mac::ExecuteGetFromAI() {
     
     std::string jsxScript;
     jsxScript += "(function() {\n";
-    jsxScript += "(function() {\n";
     jsxScript += "  var tempPath = Folder.temp.fsName;\n";
     jsxScript += "  var possiblePaths = [\n";
     jsxScript += "    tempPath + '/ai2ae.json',\n";
