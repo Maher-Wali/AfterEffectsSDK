@@ -34,29 +34,24 @@ const int BtnSendToAI = 1002;
 }
 
 - (void)setupUI {
-    NSColor* buttonColor = [NSColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:1.0]; // gray background
-    NSDictionary* titleAttributes = @{ NSForegroundColorAttributeName: [NSColor whiteColor],
-                                       NSFontAttributeName: [NSFont systemFontOfSize:13] };
+    NSDictionary* titleAttributes = @{
+        NSForegroundColorAttributeName: [NSColor blackColor],  // text color
+        NSFontAttributeName: [NSFont systemFontOfSize:13]
+    };
 
-    // Create Get button
+    // Get button
     NSButton* getButton = [[NSButton alloc] initWithFrame:NSMakeRect(10, 10, 90, 32)];
     [getButton setButtonType:NSButtonTypeMomentaryPushIn];
     [getButton setBezelStyle:NSBezelStyleRounded];
-    [getButton setWantsLayer:YES];
-    getButton.layer.backgroundColor = buttonColor.CGColor;
-    getButton.layer.cornerRadius = 6.0;
     [getButton setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Get" attributes:titleAttributes]];
     [getButton setTarget:self];
     [getButton setAction:@selector(getButtonClicked:)];
     [self addSubview:getButton];
 
-    // Create Send button
+    // Send button
     NSButton* sendButton = [[NSButton alloc] initWithFrame:NSMakeRect(110, 10, 90, 32)];
     [sendButton setButtonType:NSButtonTypeMomentaryPushIn];
     [sendButton setBezelStyle:NSBezelStyleRounded];
-    [sendButton setWantsLayer:YES];
-    sendButton.layer.backgroundColor = buttonColor.CGColor;
-    sendButton.layer.cornerRadius = 6.0;
     [sendButton setAttributedTitle:[[NSAttributedString alloc] initWithString:@"Send" attributes:titleAttributes]];
     [sendButton setTarget:self];
     [sendButton setAction:@selector(sendButtonClicked:)];
@@ -66,6 +61,7 @@ const int BtnSendToAI = 1002;
     [self setWantsLayer:YES];
     self.layer.backgroundColor = [NSColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1.0].CGColor;
 }
+
 
 
 - (void)getButtonClicked:(id)sender {
