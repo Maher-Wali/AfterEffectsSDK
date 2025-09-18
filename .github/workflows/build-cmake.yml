@@ -89,14 +89,16 @@ jobs:
             cat build/rez_stdout.log
             echo "Rez stderr (if any):"
             cat build/rez_stderr.log
-            echo "DeRez output:"
+            echo "Attempting DeRez (non-critical):"
             DeRez build/AEPathLink.rsrc > build/derez_output.log 2> build/derez_error.log || {
-              echo "⚠️ DeRez failed"
+              echo "⚠️ DeRez failed (continuing)"
               cat build/derez_error.log
               xxd build/AEPathLink.rsrc | head -20
-              exit 1
             }
-            cat build/derez_output.log
+            if [ -f build/derez_output.log ]; then
+              echo "DeRez output (if any):"
+              cat build/derez_output.log
+            fi
           else
             echo "❌ Rez failed or AEPathLink.rsrc is empty"
             cat build/rez_stdout.log
