@@ -3,13 +3,16 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleDevelopmentRegion</key>
-    <string>en</string>
+    <string>English</string>
+
+    <key>CFBundleDisplayName</key>
+	<string>ARPathLink</string>
 
     <key>CFBundleExecutable</key>
     <string>AEPathLink</string>
 
     <key>CFBundleIdentifier</key>
-    <string>com.yourcompany.aepathlink</string>
+    <string>com.plugins.aepathlink</string>
 
     <key>CFBundleInfoDictionaryVersion</key>
     <string>6.0</string>
@@ -18,7 +21,7 @@
     <string>AEPathLink</string>
 
     <key>CFBundlePackageType</key>
-    <string>BNDL</string>
+    <string>AEgp</string>
 
     <key>CFBundleShortVersionString</key>
     <string>1.0.0</string>

@@ -256,7 +256,7 @@ set(MACOSX_BUNDLE_BUNDLE_VERSION "1")
 
 # Generate Info.plist
 configure_file(
-    ${PANELATOR_SOURCE_DIR}/Info.plist.in
+    ${PANELATOR_SOURCE_DIR}/Info.plist
     ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
     @ONLY
 )
