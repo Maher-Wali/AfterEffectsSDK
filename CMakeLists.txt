@@ -228,13 +228,13 @@ set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
 add_custom_command(TARGET AEPathLink POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
     COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
-    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc missing before copy" && exit 1)
+    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc missing before copy" && false)
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-    COMMAND test -s $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || (echo "Error: Copied AEPathLink.rsrc is empty" && exit 1)
+    COMMAND test -s $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || (echo "Error: Copied AEPathLink.rsrc is empty" && false)
     COMMAND printf "BNDL????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-    COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && exit 1)
+    COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && false)
     COMMAND codesign --force --sign - $<TARGET_BUNDLE_DIR:AEPathLink>
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
     COMMENT "Setting up bundle: dirs, .rsrc, PkgInfo, and signing"
