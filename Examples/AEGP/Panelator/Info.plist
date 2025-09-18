@@ -6,7 +6,7 @@
     <string>English</string>
 
     <key>CFBundleDisplayName</key>
-	<string>ARPathLink</string>
+	<string>AEPathLink</string>
 
     <key>CFBundleExecutable</key>
     <string>AEPathLink</string>

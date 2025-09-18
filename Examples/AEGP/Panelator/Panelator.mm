@@ -165,9 +165,6 @@ public:
     }
 };
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 A_Err EntryPointFunc(
     struct SPBasicSuite* pica_basicP,
@@ -180,6 +177,3 @@ A_Err EntryPointFunc(
     } PT_XTE_CATCH_RETURN_ERR;
 }
 
-#ifdef __cplusplus
-}
-#endif
