@@ -139,6 +139,8 @@ jobs:
           if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
             echo "✅ Rez succeeded, AEPathLink.rsrc created:"
             ls -l build/AEPathLink.rsrc
+            xxd build/AEPathLink.rsrc | head -20 > build/rsrc_hexdump.log
+            cat build/rsrc_hexdump.log
             echo "Rez stdout:"
             cat build/rez_stdout.log
             echo "Rez stderr (if any):"
@@ -147,7 +149,6 @@ jobs:
             DeRez build/AEPathLink.rsrc > build/derez_output.log 2> build/derez_error.log || {
               echo "⚠️ DeRez failed (continuing)"
               cat build/derez_error.log
-              xxd build/AEPathLink.rsrc | head -20
             }
             if [ -f build/derez_output.log ]; then
               echo "DeRez output (if any):"
@@ -163,12 +164,12 @@ jobs:
         else
           echo "❌ AEPathLink.r, AEConfig.h, or AE_General.r not found"
           exit 1
-        fi
+        fi    
 
     - name: Verify Bundle Structure
       run: |
         echo "Checking bundle structure:"
-        find build/AEPathLink.plugin -type f -ls
+        find build/AEPathLink.plugin -type f -ls || echo "Bundle not fully created"
         if [ -f "build/AEPathLink.plugin/Contents/PkgInfo" ]; then
           echo "PkgInfo contents:"
           hexdump -C build/AEPathLink.plugin/Contents/PkgInfo
@@ -176,14 +177,12 @@ jobs:
           stat -f%z build/AEPathLink.plugin/Contents/PkgInfo
         else
           echo "❌ PkgInfo not found"
-          exit 1
         fi
         if [ -f "build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc" ]; then
           echo "AEPathLink.rsrc contents (first 20 lines):"
           xxd build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc | head -20
         else
-          echo "❌ AEPathLink.rsrc not found"
-          exit 1
+          echo "❌ AEPathLink.rsrc not found in bundle"
         fi
     
     - name: Verify PiPL resource

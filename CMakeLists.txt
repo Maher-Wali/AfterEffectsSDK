@@ -189,50 +189,59 @@ if(APPLE)
         -Wno-pragma-pack
         -Wno-unknown-pragmas
         -Wno-macro-redefined
-        -Wno-nonportable-include-path
+        -Wno-nonportable-include-paths
         -Wno-undefined-var-template
         -Wno-null-conversion
         -fobjc-arc
     )
 
     # Define PiPL resource path
-    set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
+set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
 
-    # Verify input files
-    if(NOT EXISTS "${PIPL_RESOURCE}")
-        message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
-    endif()
-    set(AE_CONFIG_HEADER "${CMAKE_SOURCE_DIR}/Examples/Headers/AEConfig.h")
-    set(AE_GENERAL_RESOURCE "${CMAKE_SOURCE_DIR}/Examples/Resources/AE_General.r")
-    if(NOT EXISTS "${AE_CONFIG_HEADER}")
-        message(FATAL_ERROR "AEConfig.h not found at: ${AE_CONFIG_HEADER}")
-    endif()
-    if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
-        message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
-    endif()
+# Verify input files
+if(NOT EXISTS "${PIPL_RESOURCE}")
+    message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
+endif()
+set(AE_CONFIG_HEADER "${CMAKE_SOURCE_DIR}/Examples/Headers/AEConfig.h")
+set(AE_GENERAL_RESOURCE "${CMAKE_SOURCE_DIR}/Examples/Resources/AE_General.r")
+if(NOT EXISTS "${AE_CONFIG_HEADER}")
+    message(FATAL_ERROR "AEConfig.h not found at: ${AE_CONFIG_HEADER}")
+endif()
+if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
+    message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
+endif()
 
-    # Compile PiPL resource
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        COMMAND Rez -useDF -d DEBUG=1 -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
-        COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
-        DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
-        COMMENT "Compiling PiPL resource with Rez (using data fork)"
-        VERBATIM
-    )
+# Compile PiPL resource
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+    COMMAND Rez -useDF -d DEBUG=1 -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
+    COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty or missing after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
+    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+    COMMAND xxd ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc | head -20 > ${CMAKE_CURRENT_BINARY_DIR}/rsrc_hexdump.log
+    DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
+    COMMENT "Compiling PiPL resource with Rez (using data fork)"
+    VERBATIM
+)
 
-    # Bundle setup
-    add_custom_command(TARGET AEPathLink POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
-        COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-        COMMAND printf "BNDL????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
-        COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-        COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && exit 1)
-        COMMAND codesign --force --sign - $<TARGET_BUNDLE_DIR:AEPathLink>
-        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
-        COMMENT "Setting up bundle: dirs, .rsrc, PkgInfo, and signing"
-    )
+# Set compiler flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations -fvisibility=hidden -Wno-pragma-pack -Wno-unknown-pragmas -Wno-nonportable-include-path -Wno-undefined-var-template -Wno-null-conversion")
+set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
+
+# Bundle setup
+add_custom_command(TARGET AEPathLink POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
+    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
+    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc missing before copy" && exit 1)
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
+    COMMAND test -s $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || (echo "Error: Copied AEPathLink.rsrc is empty" && exit 1)
+    COMMAND printf "BNDL????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
+    COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
+    COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && exit 1)
+    COMMAND codesign --force --sign - $<TARGET_BUNDLE_DIR:AEPathLink>
+    DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
+    COMMENT "Setting up bundle: dirs, .rsrc, PkgInfo, and signing"
+    VERBATIM
+)
 
 endif()
