@@ -76,13 +76,10 @@ jobs:
         if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ]; then
           echo "Contents of AEPathLink.r:"
           cat Examples/AEGP/Panelator/Win/AEPathLink.r
-          echo "Checking for AEConfig.h and AE_General.r:"
-          find Examples/Headers -name "AEConfig.h" -ls
-          find Examples/Resources -name "AE_General.r" -ls
-          echo "Listing include paths:"
-          ls -la Examples/Headers Examples/Resources
+          echo "Checking for Types.r:"
+          ls -la /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/
           echo "Attempting to run Rez manually:"
-          Rez -useDF -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/ -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
+          Rez -useDF -d DEBUG=1 -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/ -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
           if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
             echo "✅ Rez succeeded, AEPathLink.rsrc created:"
             ls -l build/AEPathLink.rsrc
@@ -91,12 +88,13 @@ jobs:
             echo "Rez stderr (if any):"
             cat build/rez_stderr.log
             echo "DeRez output:"
-            DeRez build/AEPathLink.rsrc 2> build/derez_error.log || {
+            DeRez build/AEPathLink.rsrc > build/derez_output.log 2> build/derez_error.log || {
               echo "⚠️ DeRez failed"
               cat build/derez_error.log
               xxd build/AEPathLink.rsrc | head -20
               exit 1
             }
+            cat build/derez_output.log
           else
             echo "❌ Rez failed or AEPathLink.rsrc is empty"
             cat build/rez_stdout.log
