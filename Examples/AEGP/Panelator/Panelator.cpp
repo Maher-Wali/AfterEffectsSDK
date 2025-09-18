@@ -37,30 +37,6 @@ const A_char* SuiteTraits<AEGP_PanelSuite1>::i_name = kAEGPPanelSuite;
 template <>
 const int32_t SuiteTraits<AEGP_PanelSuite1>::i_version = kAEGPPanelSuiteVersion1;
 
-// Helper function to convert hex color to RGB
-struct RGBColor {
-    float r, g, b;
-};
-
-RGBColor HexToRGB(const std::string& hex) {
-    RGBColor rgb = { 0.0f, 0.0f, 0.0f };
-    std::string cleanHex = hex;
-    if (cleanHex[0] == '#') {
-        cleanHex = cleanHex.substr(1);
-    }
-    if (cleanHex.length() == 6) {
-        try {
-            unsigned int hexValue = std::stoul(cleanHex, nullptr, 16);
-            rgb.r = ((hexValue >> 16) & 0xFF) / 255.0f;
-            rgb.g = ((hexValue >> 8) & 0xFF) / 255.0f;
-            rgb.b = (hexValue & 0xFF) / 255.0f;
-        }
-        catch (...) {
-            rgb.r = rgb.g = rgb.b = 0.0f;
-        }
-    }
-    return rgb;
-}
 
 class Panelator {
 public:
