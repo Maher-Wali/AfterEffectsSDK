@@ -40,7 +40,7 @@ jobs:
         <plist version="1.0">
         <dict>
             <key>CFBundleDevelopmentRegion</key>
-            <string>en</string>
+            <string>English</string>
             <key>CFBundleExecutable</key>
             <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
             <key>CFBundleIdentifier</key>
@@ -50,7 +50,7 @@ jobs:
             <key>CFBundleName</key>
             <string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
             <key>CFBundlePackageType</key>
-            <string>BNDL</string>
+            <string>AEgp</string>
             <key>CFBundleShortVersionString</key>
             <string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
             <key>CFBundleVersion</key>
@@ -183,6 +183,12 @@ jobs:
           xxd build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc | head -20
         else
           echo "❌ AEPathLink.rsrc not found in bundle"
+        fi
+        if [ -f "build/AEPathLink.plugin/Contents/Info.plist" ]; then
+          echo "Info.plist contents:"
+          cat build/AEPathLink.plugin/Contents/Info.plist
+        else
+          echo "❌ Info.plist not found"
         fi
     
     - name: Verify PiPL resource
