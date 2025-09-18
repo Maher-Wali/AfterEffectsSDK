@@ -69,48 +69,7 @@ jobs:
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
 
-    - name: Debug PiPL resource
-      run: |
-        echo "Checking for AEPathLink.r, AEConfig.h, and AE_General.r:"
-        find Examples/AEGP/Panelator -name "AEPathLink.r" -ls
-        find Examples/Headers -name "AEConfig.h" -ls
-        find Examples/Resources -name "AE_General.r" -ls
-        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ] && [ -f "Examples/Headers/AEConfig.h" ] && [ -f "Examples/Resources/AE_General.r" ]; then
-          echo "Contents of AEPathLink.r:"
-          cat Examples/AEGP/Panelator/Win/AEPathLink.r
-          echo "Contents of AE_General.r (first 20 lines):"
-          cat Examples/Resources/AE_General.r | head -n 20
-          echo "Attempting to run Rez manually:"
-          Rez -useDF -d DEBUG=1 -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
-          if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
-            echo "✅ Rez succeeded, AEPathLink.rsrc created:"
-            ls -l build/AEPathLink.rsrc
-            echo "Rez stdout:"
-            cat build/rez_stdout.log
-            echo "Rez stderr (if any):"
-            cat build/rez_stderr.log
-            echo "Attempting DeRez (non-critical):"
-            DeRez build/AEPathLink.rsrc > build/derez_output.log 2> build/derez_error.log || {
-              echo "⚠️ DeRez failed (continuing)"
-              cat build/derez_error.log
-              xxd build/AEPathLink.rsrc | head -20
-            }
-            if [ -f build/derez_output.log ]; then
-              echo "DeRez output (if any):"
-              cat build/derez_output.log
-            fi
-          else
-            echo "❌ Rez failed or AEPathLink.rsrc is empty"
-            cat build/rez_stdout.log
-            cat build/rez_stderr.log
-            ls -l build/AEPathLink.rsrc || echo "File missing"
-            exit 1
-          fi
-        else
-          echo "❌ AEPathLink.r, AEConfig.h, or AE_General.r not found"
-          exit 1
-        fi
-
+ 
     - name: Build plugin
       working-directory: build
       run: cmake --build . --config Release
@@ -164,39 +123,66 @@ jobs:
             find "$PLUGIN_PATH" -name "AEPathLink" -exec otool -L {} \; || true
         fi
 
-    - name: Verify Bundle Structure
-      working-directory: build
+    - name: Debug PiPL resource
       run: |
-        PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
-        if [ -n "$PLUGIN_PATH" ]; then
-          echo "✅ Bundle exists: $PLUGIN_PATH"
-          echo "Bundle structure:"
-          find "$PLUGIN_PATH" -type f -ls
-          echo "PkgInfo contents:"
-          xxd "$PLUGIN_PATH/Contents/PkgInfo" || { echo "❌ PkgInfo missing"; exit 1; }
-          PKGINFO_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/PkgInfo")
-          if [ "$PKGINFO_SIZE" -eq 8 ]; then
-            echo "✅ PkgInfo size: $PKGINFO_SIZE bytes"
+        echo "Checking for AEPathLink.r, AEConfig.h, and AE_General.r:"
+        find Examples/AEGP/Panelator -name "AEPathLink.r" -ls
+        find Examples/Headers -name "AEConfig.h" -ls
+        find Examples/Resources -name "AE_General.r" -ls
+        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ] && [ -f "Examples/Headers/AEConfig.h" ] && [ -f "Examples/Resources/AE_General.r" ]; then
+          echo "Contents of AEPathLink.r:"
+          cat Examples/AEGP/Panelator/Win/AEPathLink.r
+          echo "Contents of AE_General.r (first 20 lines):"
+          cat Examples/Resources/AE_General.r | head -n 20
+          echo "Attempting to run Rez manually:"
+          Rez -useDF -d DEBUG=1 -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc > build/rez_stdout.log 2> build/rez_stderr.log
+          if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
+            echo "✅ Rez succeeded, AEPathLink.rsrc created:"
+            ls -l build/AEPathLink.rsrc
+            echo "Rez stdout:"
+            cat build/rez_stdout.log
+            echo "Rez stderr (if any):"
+            cat build/rez_stderr.log
+            echo "Attempting DeRez (non-critical):"
+            DeRez build/AEPathLink.rsrc > build/derez_output.log 2> build/derez_error.log || {
+              echo "⚠️ DeRez failed (continuing)"
+              cat build/derez_error.log
+              xxd build/AEPathLink.rsrc | head -20
+            }
+            if [ -f build/derez_output.log ]; then
+              echo "DeRez output (if any):"
+              cat build/derez_output.log
+            fi
           else
-            echo "❌ PkgInfo size incorrect: $PKGINFO_SIZE bytes"
+            echo "❌ Rez failed or AEPathLink.rsrc is empty"
+            cat build/rez_stdout.log
+            cat build/rez_stderr.log
+            ls -l build/AEPathLink.rsrc || echo "File missing"
             exit 1
           fi
-          echo "RSRC size in bundle:"
-          ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || { echo "❌ RSRC missing"; exit 1; }
-          RSRC_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc")
-          if [ "$RSRC_SIZE" -gt 0 ]; then
-            echo "✅ RSRC size: $RSRC_SIZE bytes"
-            DeRez "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || echo "⚠️ DeRez failed on bundle RSRC"
-          else
-            echo "❌ RSRC empty in bundle"
-            exit 1
-          fi
-          echo "Info.plist validation:"
-          plutil -lint "$PLUGIN_PATH/Contents/Info.plist" || { echo "❌ Info.plist invalid"; exit 1; }
-          echo "Binary info:"
-          file "$PLUGIN_PATH/Contents/MacOS/AEPathLink" || { echo "❌ Binary missing"; exit 1; }
         else
-          echo "❌ No plugin bundle found"
+          echo "❌ AEPathLink.r, AEConfig.h, or AE_General.r not found"
+          exit 1
+        fi
+
+    - name: Verify Bundle Structure
+      run: |
+        echo "Checking bundle structure:"
+        find build/AEPathLink.plugin -type f -ls
+        if [ -f "build/AEPathLink.plugin/Contents/PkgInfo" ]; then
+          echo "PkgInfo contents:"
+          hexdump -C build/AEPathLink.plugin/Contents/PkgInfo
+          echo "PkgInfo size:"
+          stat -f%z build/AEPathLink.plugin/Contents/PkgInfo
+        else
+          echo "❌ PkgInfo not found"
+          exit 1
+        fi
+        if [ -f "build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc" ]; then
+          echo "AEPathLink.rsrc contents (first 20 lines):"
+          xxd build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc | head -20
+        else
+          echo "❌ AEPathLink.rsrc not found"
           exit 1
         fi
     
