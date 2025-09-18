@@ -69,6 +69,33 @@ jobs:
         cd build
         cmake -DCMAKE_BUILD_TYPE=Release ..
 
+    - name: Debug PiPL resource
+      run: |
+        echo "Checking for AEPathLink.r:"
+        find Examples/AEGP/Panelator -name "AEPathLink.r" -ls
+        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ]; then
+          echo "Contents of AEPathLink.r:"
+          cat Examples/AEGP/Panelator/Win/AEPathLink.r
+          echo "Checking for AEConfig.h and AE_General.r:"
+          find Examples/Headers -name "AEConfig.h" -ls
+          find Examples/Resources -name "AE_General.r" -ls
+          echo "Listing all files in Examples/Headers and Examples/Resources:"
+          find Examples/Headers -ls
+          find Examples/Resources -ls
+          echo "Attempting to run Rez manually:"
+          Rez -v -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Resources/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc 2>&1 || {
+            echo "❌ Rez command failed"
+            cat build/rez_error.log
+            exit 1
+          }
+          ls -l build/AEPathLink.rsrc || echo "❌ AEPathLink.rsrc not created"
+        else
+          echo "❌ AEPathLink.r not found"
+          exit 1
+        fi
+        echo "Checking build dir for AEPathLink.rsrc:"
+        find build -name "AEPathLink.rsrc" -ls
+
     - name: Build plugin
       working-directory: build
       run: cmake --build . --config Release
@@ -108,41 +135,16 @@ jobs:
             find "$PLUGIN_PATH" -name "AEPathLink" -exec otool -L {} \; || true
         fi
 
-    - name: Debug PiPL resource
+    
+    - name: Verify PiPL resource
+      working-directory: build
       run: |
-        echo "Checking for AEPathLink.r:"
-        find Examples/AEGP/Panelator -name "AEPathLink.r" -ls
-        if [ -f "Examples/AEGP/Panelator/Win/AEPathLink.r" ]; then
-          echo "Contents of AEPathLink.r:"
-          cat Examples/AEGP/Panelator/Win/AEPathLink.r
-          echo "Checking for AEConfig.h and AE_General.r:"
-          find Examples/Headers -name "AEConfig.h" -ls
-          find Examples/Resources -name "AE_General.r" -ls
-          echo "Listing all files in Examples/Headers and Examples/Resources:"
-          find Examples/Headers -ls
-          find Examples/Resources -ls
-          echo "Attempting to run Rez manually:"
-          Rez -v -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Resources/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc 2>&1 || {
-            echo "❌ Rez command failed"
-            cat build/rez_error.log
-            exit 1
-          }
-          ls -l build/AEPathLink.rsrc || echo "❌ AEPathLink.rsrc not created"
-        else
-          echo "❌ AEPathLink.r not found"
+        if [ ! -f AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc ]; then
+          echo "❌ PiPL .rsrc file not found!"
           exit 1
+        else
+          echo "✅ PiPL .rsrc present"
         fi
-        echo "Checking build dir for AEPathLink.rsrc:"
-        find build -name "AEPathLink.rsrc" -ls
-        - name: Verify PiPL resource
-          working-directory: build
-          run: |
-            if [ ! -f AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc ]; then
-              echo "❌ PiPL .rsrc file not found!"
-              exit 1
-            else
-              echo "✅ PiPL .rsrc present"
-            fi
 
     - name: Package for distribution
       working-directory: build
