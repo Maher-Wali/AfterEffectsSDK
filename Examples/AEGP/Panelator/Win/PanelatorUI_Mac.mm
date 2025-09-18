@@ -134,11 +134,16 @@ void PanelatorUI_Mac::ExecuteGetFromAI() {
     }
     
     std::string jsxScript;
-    jsxScript += "(function() {\n";
-    jsxScript += "  var jsonFile = new File(Folder.temp.fsName + '/ai2ae.json');\n";
-    jsxScript += "  if (!jsonFile.exists) {\n";
-    jsxScript += "    alert('JSON file not found: ' + jsonFile.fsName);\n";
-    jsxScript += "    return;\n";
+    jsxScript += "  var tempPath = Folder.temp.fsName;\n";
+    jsxScript += "  var possiblePaths = [\n";
+    jsxScript += "    tempPath + '/ai2ae.json',\n";
+    jsxScript += "    tempPath.replace(/TemporaryItems$/, '') + '/ai2ae.json'\n";
+    jsxScript += "  ];\n";
+    jsxScript += "  var jsonFile = null;\n";
+    jsxScript += "  for (var i = 0; i < possiblePaths.length; i++) {\n";
+    jsxScript += "    jsonFile = new File(possiblePaths[i]);\n";
+    jsxScript += "    if (jsonFile.exists) break;\n";
+    jsxScript += "    jsonFile = null;\n";
     jsxScript += "  }\n";
     jsxScript += "  if (!jsonFile.open('r')) {\n";
     jsxScript += "    alert('Failed to open JSON file: ' + jsonFile.error);\n";
