@@ -169,21 +169,50 @@ jobs:
     - name: Verify Bundle Structure
       working-directory: build
       run: |
-        echo "Checking bundle structure:"
-        find . -name "*.plugin" -ls || echo "No plugin bundle found"
         PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
         if [ -n "$PLUGIN_PATH" ]; then
           echo "Bundle contents:"
           find "$PLUGIN_PATH" -type f -ls
-          echo "PkgInfo:"
-          ls -l "$PLUGIN_PATH/Contents/PkgInfo"
-          hexdump -C "$PLUGIN_PATH/Contents/PkgInfo"
-          echo "Info.plist:"
-          cat "$PLUGIN_PATH/Contents/Info.plist"
-          echo "RSRC:"
-          ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc"
-          xxd "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" | head -20
-          echo "Binary:"
+          echo "PkgInfo check:"
+          if [ -f "$PLUGIN_PATH/Contents/PkgInfo" ]; then
+            PKG_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/PkgInfo")
+            echo "PkgInfo size: $PKG_SIZE bytes"
+            if [ "$PKG_SIZE" -eq 8 ]; then
+              echo "✅ PkgInfo size correct"
+              hexdump -C "$PLUGIN_PATH/Contents/PkgInfo"
+            else
+              echo "❌ PkgInfo size incorrect ($PKG_SIZE bytes)"
+              hexdump -C "$PLUGIN_PATH/Contents/PkgInfo"
+              exit 1
+            fi
+          else
+            echo "❌ PkgInfo missing"
+            exit 1
+          fi
+          echo "RSRC check:"
+          if [ -f "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" ]; then
+            RSRC_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc")
+            echo "RSRC size: $RSRC_SIZE bytes"
+            if [ "$RSRC_SIZE" -gt 0 ]; then
+              echo "✅ RSRC non-empty"
+              xxd "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" | head -20
+            else
+              echo "❌ RSRC empty"
+              exit 1
+            fi
+          else
+            echo "❌ RSRC missing"
+            exit 1
+          fi
+          echo "Info.plist check:"
+          if [ -f "$PLUGIN_PATH/Contents/Info.plist" ]; then
+            plutil -lint "$PLUGIN_PATH/Contents/Info.plist" || echo "Info.plist lint failed"
+            cat "$PLUGIN_PATH/Contents/Info.plist"
+          else
+            echo "❌ Info.plist missing"
+            exit 1
+          fi
+          echo "Binary check:"
           file "$PLUGIN_PATH/Contents/MacOS/AEPathLink"
         else
           echo "❌ No plugin bundle found"

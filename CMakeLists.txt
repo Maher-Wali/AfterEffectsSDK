@@ -257,7 +257,6 @@ add_custom_command(TARGET AEPathLink POST_BUILD
     COMMAND printf "AEgp????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-    COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && exit 1)
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
     COMMENT "Setting up bundle: PkgInfo"
     VERBATIM
