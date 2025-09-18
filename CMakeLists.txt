@@ -224,6 +224,10 @@ add_custom_command(
     VERBATIM
 )
 
+# 🔹 FIX: Make plugin depend on the resource
+add_custom_target(AEPathLink_rsrc DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc)
+add_dependencies(AEPathLink AEPathLink_rsrc)
+
 # Define bundle vars for Info.plist substitution
 set(MACOSX_BUNDLE_EXECUTABLE_NAME "AEPathLink")
 set(MACOSX_BUNDLE_BUNDLE_NAME "AEPathLink")
