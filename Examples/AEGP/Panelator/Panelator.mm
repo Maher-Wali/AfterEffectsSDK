@@ -13,9 +13,6 @@
 #include "config.h"
 #include "LicensingUtils.h"
 
-
-
-
 #ifdef _WIN32
 #include <windows.h>
 #include <shlobj.h>
@@ -25,7 +22,6 @@
 #include <Cocoa/Cocoa.h>
 #include <objc/objc-runtime.h>
 #endif
-
 
 #ifdef _WIN32
 #include "PanelatorUI_Plat.h"
@@ -41,130 +37,103 @@ const A_char* SuiteTraits<AEGP_PanelSuite1>::i_name = kAEGPPanelSuite;
 template <>
 const int32_t SuiteTraits<AEGP_PanelSuite1>::i_version = kAEGPPanelSuiteVersion1;
 
-
 // Helper function to convert hex color to RGB
 struct RGBColor {
-	float r, g, b;
+    float r, g, b;
 };
 
 RGBColor HexToRGB(const std::string& hex) {
-	RGBColor rgb = { 0.0f, 0.0f, 0.0f };
-
-	std::string cleanHex = hex;
-	if (cleanHex[0] == '#') {
-		cleanHex = cleanHex.substr(1);
-	}
-	if (cleanHex.length() == 6) {
-		try {
-			unsigned int hexValue = std::stoul(cleanHex, nullptr, 16);
-			rgb.r = ((hexValue >> 16) & 0xFF) / 255.0f;
-			rgb.g = ((hexValue >> 8) & 0xFF) / 255.0f;
-			rgb.b = (hexValue & 0xFF) / 255.0f;
-		}
-		catch (...) {
-			// Default to black if parsing fails
-			rgb.r = rgb.g = rgb.b = 0.0f;
-		}
-	}
-	return rgb;
+    RGBColor rgb = { 0.0f, 0.0f, 0.0f };
+    std::string cleanHex = hex;
+    if (cleanHex[0] == '#') {
+        cleanHex = cleanHex.substr(1);
+    }
+    if (cleanHex.length() == 6) {
+        try {
+            unsigned int hexValue = std::stoul(cleanHex, nullptr, 16);
+            rgb.r = ((hexValue >> 16) & 0xFF) / 255.0f;
+            rgb.g = ((hexValue >> 8) & 0xFF) / 255.0f;
+            rgb.b = (hexValue & 0xFF) / 255.0f;
+        }
+        catch (...) {
+            rgb.r = rgb.g = rgb.b = 0.0f;
+        }
+    }
+    return rgb;
 }
 
-
-
-class Panelator
-{
+class Panelator {
 public:
-	SPBasicSuite*                   i_pica_basicP;
-	AEGP_PluginID					i_pluginID;
-	AEGP_SuiteHandler				i_sp;
-	AEGP_Command					i_command;
-    AEGP_Command                    i_reg_command;
-	AEGP_Command					i_sendToAICommand;
+    SPBasicSuite* i_pica_basicP;
+    AEGP_PluginID i_pluginID;
+    AEGP_SuiteHandler i_sp;
+    AEGP_Command i_command;
+    AEGP_Command i_reg_command;
     SuiteHelper<AEGP_PanelSuite1> i_ps;
     const A_u_char* i_match_nameZ;
-	/// STATIC BINDERS
-	static SPAPI A_Err
-		S_CommandHook(
-			AEGP_GlobalRefcon	plugin_refconP,			/* >> */
-			AEGP_CommandRefcon	refconP,				/* >> */
-			AEGP_Command		command,				/* >> */
-			AEGP_HookPriority	hook_priority,			/* >> currently always AEGP_HP_BeforeAE */
-			A_Boolean			already_handledB,		/* >> */
-			A_Boolean* handledPB)		/* << whether you handled */
-	{
-		PT_XTE_START{
-			reinterpret_cast<Panelator*>(refconP)->CommandHook(command, hook_priority, already_handledB, handledPB);
-		} PT_XTE_CATCH_RETURN_ERR;
-	}
 
-	static A_Err
-		S_UpdateMenuHook(
-			AEGP_GlobalRefcon		plugin_refconP,		/* >> */
-			AEGP_UpdateMenuRefcon	refconP,			/* >> */
-			AEGP_WindowType			active_window)		/* >> */
-	{
-		PT_XTE_START{
-			reinterpret_cast<Panelator*>(plugin_refconP)->UpdateMenuHook(active_window);
-		} PT_XTE_CATCH_RETURN_ERR;
-	}
+    static SPAPI A_Err S_CommandHook(
+        AEGP_GlobalRefcon plugin_refconP,
+        AEGP_CommandRefcon refconP,
+        AEGP_Command command,
+        AEGP_HookPriority hook_priority,
+        A_Boolean already_handledB,
+        A_Boolean* handledPB) {
+        PT_XTE_START {
+            reinterpret_cast<Panelator*>(refconP)->CommandHook(command, hook_priority, already_handledB, handledPB);
+        } PT_XTE_CATCH_RETURN_ERR;
+    }
 
-    static A_Err
-        S_CreatePanelHook(
-            AEGP_GlobalRefcon		plugin_refconP,
-            AEGP_CreatePanelRefcon	refconP,
-            AEGP_PlatformViewRef	container,
-            AEGP_PanelH				panelH,
-            AEGP_PanelFunctions1*   outFunctionTable,
-            AEGP_PanelRefcon*       outRefcon)
-    {
-        PT_XTE_START{
+    static A_Err S_UpdateMenuHook(
+        AEGP_GlobalRefcon plugin_refconP,
+        AEGP_UpdateMenuRefcon refconP,
+        AEGP_WindowType active_window) {
+        PT_XTE_START {
+            reinterpret_cast<Panelator*>(plugin_refconP)->UpdateMenuHook(active_window);
+        } PT_XTE_CATCH_RETURN_ERR;
+    }
+
+    static A_Err S_CreatePanelHook(
+        AEGP_GlobalRefcon plugin_refconP,
+        AEGP_CreatePanelRefcon refconP,
+        AEGP_PlatformViewRef container,
+        AEGP_PanelH panelH,
+        AEGP_PanelFunctions1* outFunctionTable,
+        AEGP_PanelRefcon* outRefcon) {
+        PT_XTE_START {
             reinterpret_cast<Panelator*>(plugin_refconP)->CreatePanelHook(container, panelH, outFunctionTable, outRefcon);
         } PT_XTE_CATCH_RETURN_ERR;
     }
 
-	Panelator(
-		SPBasicSuite* pica_basicP,
-		AEGP_PluginID	pluginID) :
-		i_pica_basicP(pica_basicP),
-		i_pluginID(pluginID),
-		i_sp(pica_basicP),
+    Panelator(SPBasicSuite* pica_basicP, AEGP_PluginID pluginID) :
+        i_pica_basicP(pica_basicP),
+        i_pluginID(pluginID),
+        i_sp(pica_basicP),
         i_ps(pica_basicP),
-        i_match_nameZ((A_u_char*)"PathLink")
-	{
-
+        i_match_nameZ((A_u_char*)"AEPathLink") {  // Match PiPL Name
         // Register panel in Window menu
         PT_ETX(i_sp.CommandSuite1()->AEGP_GetUniqueCommand(&i_command));
         PT_ETX(i_sp.CommandSuite1()->AEGP_InsertMenuCommand(i_command, "PathLink", AEGP_Menu_WINDOW, AEGP_MENU_INSERT_SORTED));
 
-
-		
-		PT_ETX(i_sp.RegisterSuite5()->AEGP_RegisterCommandHook(i_pluginID,
-			AEGP_HP_BeforeAE,
-			i_command,
-			&Panelator::S_CommandHook,
-			(AEGP_CommandRefcon)(this)));
-
+        PT_ETX(i_sp.RegisterSuite5()->AEGP_RegisterCommandHook(i_pluginID,
+            AEGP_HP_BeforeAE,
+            i_command,
+            &Panelator::S_CommandHook,
+            (AEGP_CommandRefcon)(this)));
 
         // Register menu update hook
         PT_ETX(i_sp.RegisterSuite5()->AEGP_RegisterUpdateMenuHook(i_pluginID,
             &Panelator::S_UpdateMenuHook,
             NULL));
 
-        //initialize licensing
+        // Initialize licensing
         LicensingUtils::InitializeLicense(i_sp);
 
-        // Register registration command and menu item (e.g., under Help menu)
+        // Register registration command and menu item
         PT_ETX(i_sp.CommandSuite1()->AEGP_GetUniqueCommand(&i_reg_command));
         PT_ETX(i_sp.CommandSuite1()->AEGP_InsertMenuCommand(i_reg_command, "Register PathLink", AEGP_Menu_WINDOW, AEGP_MENU_INSERT_SORTED));
 
-        // Register hook for registration command
-        PT_ETX(i_sp.RegisterSuite5()->AEGP_RegisterCommandHook(i_pluginID,
-            AEGP_HP_BeforeAE,
-            i_reg_command,
-            &Panelator::S_CommandHook,
-            (AEGP_CommandRefcon)(this)));
-
-        // Register hook for registration command
+        // Register hook for registration command (once)
         PT_ETX(i_sp.RegisterSuite5()->AEGP_RegisterCommandHook(i_pluginID,
             AEGP_HP_BeforeAE,
             i_reg_command,
@@ -176,17 +145,14 @@ public:
             &Panelator::S_CreatePanelHook,
             (AEGP_CreatePanelRefcon)this,
             true));
-
-	}
+    }
 
     void CommandHook(
         AEGP_Command command,
         AEGP_HookPriority hook_priority,
         A_Boolean already_handledB,
-        A_Boolean* handledPB)
-    {
+        A_Boolean* handledPB) {
         if (command == i_command) {
-            // Toggle panel visibility when menu item is clicked
             PT_ETX(i_ps->AEGP_ToggleVisibility(i_match_nameZ));
             *handledPB = TRUE;
         }
@@ -196,13 +162,9 @@ public:
         }
     }
 
-    void UpdateMenuHook(
-        AEGP_WindowType			active_window)		/* >> */
-    {
+    void UpdateMenuHook(AEGP_WindowType active_window) {
         PT_ETX(i_sp.CommandSuite1()->AEGP_EnableCommand(i_command));
-
         A_Boolean out_thumb_is_shownB = FALSE, out_panel_is_frontmostB = FALSE;
-
         PT_ETX(i_ps->AEGP_IsShown(i_match_nameZ, &out_thumb_is_shownB, &out_panel_is_frontmostB));
         PT_ETX(i_sp.CommandSuite1()->AEGP_CheckMarkMenuCommand(i_command, out_thumb_is_shownB && out_panel_is_frontmostB));
         PT_ETX(i_sp.CommandSuite1()->AEGP_EnableCommand(i_reg_command));
@@ -210,33 +172,30 @@ public:
 
     void CreatePanelHook(
         AEGP_PlatformViewRef container,
-        AEGP_PanelH		panelH,
+        AEGP_PanelH panelH,
         AEGP_PanelFunctions1* outFunctionTable,
-        AEGP_PanelRefcon* outRefcon)
-    {
-        #ifdef _WIN32
-                * outRefcon = reinterpret_cast<AEGP_PanelRefcon>(
-                    new PanelatorUI_Plat(i_pica_basicP, panelH, container, outFunctionTable, i_pluginID));
-        #elif defined(__APPLE__)
-                *outRefcon = reinterpret_cast<AEGP_PanelRefcon>(
-                    new PanelatorUI_Mac(i_pica_basicP, panelH, container, outFunctionTable, i_pluginID));
-        #endif
+        AEGP_PanelRefcon* outRefcon) {
+#ifdef _WIN32
+        *outRefcon = reinterpret_cast<AEGP_PanelRefcon>(
+            new PanelatorUI_Plat(i_pica_basicP, panelH, container, outFunctionTable, i_pluginID));
+#elif defined(__APPLE__)
+        *outRefcon = reinterpret_cast<AEGP_PanelRefcon>(
+            new PanelatorUI_Mac(i_pica_basicP, panelH, container, outFunctionTable, i_pluginID));
+#endif
     }
 
     ~Panelator() {
-        // Drop floating license if applicable
         aescripts::dropLicenseFromLicenseServer(LIC_PRODUCT_ID, LIC_PRIVATE_NUM);
     }
 };
 
 A_Err EntryPointFunc(
-	struct SPBasicSuite* pica_basicP,			/* >> */
-	A_long				 	major_versionL,			/* >> */
-	A_long					minor_versionL,			/* >> */
-	AEGP_PluginID			aegp_plugin_id,			/* >> */
-	AEGP_GlobalRefcon* global_refconP)		/* << */
-{
-	PT_XTE_START{
-		*global_refconP = (AEGP_GlobalRefcon) new Panelator(pica_basicP, aegp_plugin_id);
-	} PT_XTE_CATCH_RETURN_ERR;
+    struct SPBasicSuite* pica_basicP,
+    A_long major_versionL,
+    A_long minor_versionL,
+    AEGP_PluginID aegp_plugin_id,
+    AEGP_GlobalRefcon* global_refconP) {
+    PT_XTE_START {
+        *global_refconP = (AEGP_GlobalRefcon) new Panelator(pica_basicP, aegp_plugin_id);
+    } PT_XTE_CATCH_RETURN_ERR;
 }
