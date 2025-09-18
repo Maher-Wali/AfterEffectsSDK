@@ -162,18 +162,22 @@ if(APPLE)
         MACOSX_BUNDLE_BUNDLE_VERSION "1"
     )
 
-    # Path to aescripts licensing library (adjust if your repo has a different structure)
+    # Path to aescripts licensing library 
     set(AESCRIPTS_LIB
-        ${PANELATOR_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/lib/macos/aescriptsLicensing_Release.a
+        ${PANELATOR_SOURCE_DIR}/aescripts-PLUGINS-licensing-framework/lib/MacOS/aescriptsLicensing_Release.a
     )
 
-    target_link_libraries(AEPathLink
-        "-framework Cocoa"
-        "-framework CoreFoundation"
-        "-framework IOKit"
-        "-lcurl"
-        ${AESCRIPTS_LIB}
-    )
+    if(APPLE)
+        target_link_libraries(AEPathLink
+            "-framework Cocoa"
+            "-framework QuartzCore"
+            "-framework CoreFoundation"
+            "-framework ApplicationServices"
+            "-framework IOKit"
+            "-lcurl"   # libcurl.tbd
+            ${AESCRIPTS_LIB}
+        )
+    endif()
 
     target_compile_definitions(AEPathLink PRIVATE
         MAC_ENV=1
