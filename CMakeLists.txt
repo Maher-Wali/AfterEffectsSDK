@@ -215,8 +215,8 @@ endif()
 add_custom_command(
     OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
     COMMAND Rez -useDF -d DEBUG=1 -i "${CMAKE_SOURCE_DIR}/Examples/Headers" -i "${CMAKE_SOURCE_DIR}/Examples/Resources" -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/" ${PIPL_RESOURCE} -o ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc > ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log 2> ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log
-    COMMAND sync  # Ensure file is flushed
-    COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty or missing after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
+    COMMAND sync
+    COMMAND test -s ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc is empty after Rez" && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stdout.log && cat ${CMAKE_CURRENT_BINARY_DIR}/rez_stderr.log && exit 1)
     COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
     COMMAND xxd ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc | head -20 > ${CMAKE_CURRENT_BINARY_DIR}/rsrc_hexdump.log
     DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
@@ -224,32 +224,42 @@ add_custom_command(
     VERBATIM
 )
 
-# Set compiler flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations -fvisibility=hidden -Wno-pragma-pack -Wno-unknown-pragmas -Wno-nonportable-include-path -Wno-undefined-var-template -Wno-null-conversion")
-set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
-
-# Create Info.plist
+# Generate Info.plist
 configure_file(
-    ${CMAKE_SOURCE_DIR}/Examples/AEGP/Panelator/Info.plist.in
+    ${PANELATOR_SOURCE_DIR}/Info.plist.in
     ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
     @ONLY
 )
 
-# Bundle setup
+# Set compiler flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wno-deprecated-declarations -fvisibility=hidden -Wno-pragma-pack -Wno-unknown-pragmas -Wno-nonportable-include-path -Wno-undefined-var-template -Wno-null-conversion")
+set(CMAKE_OBJCXX_FLAGS "${CMAKE_OBJCXX_FLAGS} -fobjc-arc")
+
+# Add .rsrc as bundle resource
+set_source_files_properties(${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc PROPERTIES
+    MACOSX_PACKAGE_LOCATION "Resources"
+)
+
+# Bundle properties
+set_target_properties(AEPathLink PROPERTIES
+    BUNDLE TRUE
+    BUNDLE_EXTENSION "plugin"
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
+    MACOSX_BUNDLE_BUNDLE_NAME "AEPathLink"
+    MACOSX_BUNDLE_EXECUTABLE_NAME "AEPathLink"
+    MACOSX_BUNDLE_IDENTIFIER "com.example.AEPathLink"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "1.0"
+    MACOSX_BUNDLE_BUNDLE_VERSION "1"
+)
+
+# Bundle setup (PkgInfo only)
 add_custom_command(TARGET AEPathLink POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
-    COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
-    COMMAND ls -l ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc || (echo "Error: AEPathLink.rsrc missing before copy" && exit 1)
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-    COMMAND test -s $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc || (echo "Error: Copied AEPathLink.rsrc is empty" && exit 1)
     COMMAND printf "AEgp????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/Info.plist $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Info.plist
     COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
     COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && exit 1)
-    COMMAND codesign --force --sign - $<TARGET_BUNDLE_DIR:AEPathLink>
     DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc ${CMAKE_CURRENT_BINARY_DIR}/Info.plist
-    COMMENT "Setting up bundle: dirs, .rsrc, PkgInfo, Info.plist, and signing"
+    COMMENT "Setting up bundle: PkgInfo"
     VERBATIM
 )
 

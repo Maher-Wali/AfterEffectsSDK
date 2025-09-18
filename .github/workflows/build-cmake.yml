@@ -42,19 +42,19 @@ jobs:
             <key>CFBundleDevelopmentRegion</key>
             <string>English</string>
             <key>CFBundleExecutable</key>
-            <string>${MACOSX_BUNDLE_EXECUTABLE_NAME}</string>
+            <string>@MACOSX_BUNDLE_EXECUTABLE_NAME@</string>
             <key>CFBundleIdentifier</key>
-            <string>${MACOSX_BUNDLE_IDENTIFIER}</string>
+            <string>@MACOSX_BUNDLE_IDENTIFIER@</string>
             <key>CFBundleInfoDictionaryVersion</key>
             <string>6.0</string>
             <key>CFBundleName</key>
-            <string>${MACOSX_BUNDLE_BUNDLE_NAME}</string>
+            <string>@MACOSX_BUNDLE_BUNDLE_NAME@</string>
             <key>CFBundlePackageType</key>
             <string>AEgp</string>
             <key>CFBundleShortVersionString</key>
-            <string>${MACOSX_BUNDLE_SHORT_VERSION_STRING}</string>
+            <string>@MACOSX_BUNDLE_SHORT_VERSION_STRING@</string>
             <key>CFBundleVersion</key>
-            <string>${MACOSX_BUNDLE_BUNDLE_VERSION}</string>
+            <string>@MACOSX_BUNDLE_BUNDLE_VERSION@</string>
             <key>CSResourcesFileMapped</key>
             <true/>
             <key>LSMinimumSystemVersion</key>
@@ -167,28 +167,27 @@ jobs:
         fi    
 
     - name: Verify Bundle Structure
+      working-directory: build
       run: |
         echo "Checking bundle structure:"
-        find build/AEPathLink.plugin -type f -ls || echo "Bundle not fully created"
-        if [ -f "build/AEPathLink.plugin/Contents/PkgInfo" ]; then
-          echo "PkgInfo contents:"
-          hexdump -C build/AEPathLink.plugin/Contents/PkgInfo
-          echo "PkgInfo size:"
-          stat -f%z build/AEPathLink.plugin/Contents/PkgInfo
+        find . -name "*.plugin" -ls || echo "No plugin bundle found"
+        PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
+        if [ -n "$PLUGIN_PATH" ]; then
+          echo "Bundle contents:"
+          find "$PLUGIN_PATH" -type f -ls
+          echo "PkgInfo:"
+          ls -l "$PLUGIN_PATH/Contents/PkgInfo"
+          hexdump -C "$PLUGIN_PATH/Contents/PkgInfo"
+          echo "Info.plist:"
+          cat "$PLUGIN_PATH/Contents/Info.plist"
+          echo "RSRC:"
+          ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc"
+          xxd "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" | head -20
+          echo "Binary:"
+          file "$PLUGIN_PATH/Contents/MacOS/AEPathLink"
         else
-          echo "❌ PkgInfo not found"
-        fi
-        if [ -f "build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc" ]; then
-          echo "AEPathLink.rsrc contents (first 20 lines):"
-          xxd build/AEPathLink.plugin/Contents/Resources/AEPathLink.rsrc | head -20
-        else
-          echo "❌ AEPathLink.rsrc not found in bundle"
-        fi
-        if [ -f "build/AEPathLink.plugin/Contents/Info.plist" ]; then
-          echo "Info.plist contents:"
-          cat build/AEPathLink.plugin/Contents/Info.plist
-        else
-          echo "❌ Info.plist not found"
+          echo "❌ No plugin bundle found"
+          exit 1
         fi
     
     - name: Verify PiPL resource
