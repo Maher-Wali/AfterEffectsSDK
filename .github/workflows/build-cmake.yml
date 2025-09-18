@@ -79,28 +79,30 @@ jobs:
           echo "Checking for AEConfig.h and AE_General.r:"
           find Examples/Headers -name "AEConfig.h" -ls
           find Examples/Resources -name "AE_General.r" -ls
-          echo "Listing all files in Examples/Headers and Examples/Resources:"
-          find Examples/Headers -ls 2>/dev/null || true
-          find Examples/Resources -ls 2>/dev/null || true
+          echo "Listing include paths:"
+          ls -la Examples/Headers Examples/Resources
           echo "Attempting to run Rez manually:"
-          Rez -i Examples/Headers -i Examples/Resources -i "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Resources/" Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc || {
-            echo "❌ Rez command failed. Check output above for details (e.g., missing file or syntax error)."
-            exit 1
-          }
-          if [ -f "build/AEPathLink.rsrc" ]; then
-            echo "✅ AEPathLink.rsrc created successfully:"
+          Rez -i Examples/Headers -i Examples/Resources -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Resources/ -i /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/ Examples/AEGP/Panelator/Win/AEPathLink.r -o build/AEPathLink.rsrc 2> build/rez_error.log
+          if [ $? -eq 0 ] && [ -s build/AEPathLink.rsrc ]; then
+            echo "✅ Rez succeeded, AEPathLink.rsrc created:"
             ls -l build/AEPathLink.rsrc
-            echo "Size: $(stat -f%z build/AEPathLink.rsrc) bytes"
+            echo "DeRez output:"
+            DeRez build/AEPathLink.rsrc 2> build/derez_error.log || {
+              echo "⚠️ DeRez failed"
+              cat build/derez_error.log
+              xxd build/AEPathLink.rsrc | head -20
+              exit 1
+            }
           else
-            echo "❌ AEPathLink.rsrc not created"
+            echo "❌ Rez failed or AEPathLink.rsrc is empty"
+            cat build/rez_error.log
+            ls -l build/AEPathLink.rsrc || echo "File missing"
             exit 1
           fi
         else
           echo "❌ AEPathLink.r not found"
           exit 1
         fi
-        echo "Checking build dir for AEPathLink.rsrc:"
-        find build -name "AEPathLink.rsrc" -ls 2>/dev/null || true
 
     - name: Build plugin
       working-directory: build
@@ -161,14 +163,31 @@ jobs:
         PLUGIN_PATH=$(find . -name "*.plugin" | head -1)
         if [ -n "$PLUGIN_PATH" ]; then
           echo "✅ Bundle exists: $PLUGIN_PATH"
-          echo "Full bundle tree:"
+          echo "Bundle structure:"
           find "$PLUGIN_PATH" -type f -ls
-          echo "PkgInfo contents (hex):"
-          xxd "$PLUGIN_PATH/Contents/PkgInfo" || echo "❌ PkgInfo missing or invalid"
-          echo "RSRC exists and size:"
-          ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || echo "❌ RSRC missing"
-          echo "Info.plist exists:"
-          ls -l "$PLUGIN_PATH/Contents/Info.plist" || echo "❌ Info.plist missing"
+          echo "PkgInfo contents:"
+          xxd "$PLUGIN_PATH/Contents/PkgInfo" || { echo "❌ PkgInfo missing"; exit 1; }
+          PKGINFO_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/PkgInfo")
+          if [ "$PKGINFO_SIZE" -eq 8 ]; then
+            echo "✅ PkgInfo size: $PKGINFO_SIZE bytes"
+          else
+            echo "❌ PkgInfo size incorrect: $PKGINFO_SIZE bytes"
+            exit 1
+          fi
+          echo "RSRC size:"
+          ls -l "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || { echo "❌ RSRC missing"; exit 1; }
+          RSRC_SIZE=$(stat -f%z "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc")
+          if [ "$RSRC_SIZE" -gt 0 ]; then
+            echo "✅ RSRC size: $RSRC_SIZE bytes"
+            DeRez "$PLUGIN_PATH/Contents/Resources/AEPathLink.rsrc" || echo "⚠️ DeRez failed"
+          else
+            echo "❌ RSRC empty"
+            exit 1
+          fi
+          echo "Info.plist validation:"
+          plutil -lint "$PLUGIN_PATH/Contents/Info.plist" || { echo "❌ Info.plist invalid"; exit 1; }
+          echo "Binary info:"
+          file "$PLUGIN_PATH/Contents/MacOS/AEPathLink" || { echo "❌ Binary missing"; exit 1; }
         else
           echo "❌ No plugin bundle found"
           exit 1
