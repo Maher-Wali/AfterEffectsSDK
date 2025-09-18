@@ -98,12 +98,12 @@ include_directories(${INCLUDE_DIRS})
 
 # --- Cross-platform source files ---
 set(SOURCES
-    ${PANELATOR_SOURCE_DIR}/panelator.cpp
-    ${PANELATOR_SOURCE_DIR}/PanelatorUI.cpp
-    ${PANELATOR_SOURCE_DIR}/Panelator_Strings.cpp
+    ${PANELATOR_SOURCE_DIR}/panelator.mm
+    ${PANELATOR_SOURCE_DIR}/PanelatorUI.mm
+    ${PANELATOR_SOURCE_DIR}/Panelator_Strings.mm
     # Include cross-platform sources from Win directory
-    ${PANELATOR_SOURCE_DIR}/Win/Parser.cpp
-    ${PANELATOR_SOURCE_DIR}/Win/LicensingUtils.cpp
+    ${PANELATOR_SOURCE_DIR}/Win/Parser.mm
+    ${PANELATOR_SOURCE_DIR}/Win/LicensingUtils.mm
 )
 
 list(APPEND SOURCES
