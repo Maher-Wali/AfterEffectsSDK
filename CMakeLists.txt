@@ -196,8 +196,8 @@ if(APPLE)
     )
 
     # Define PiPL resource path
-    set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")  # Or Panelator_PiPL.r    
-
+    set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
+    
     # Verify input files
     if(NOT EXISTS "${PIPL_RESOURCE}")
         message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
@@ -209,8 +209,8 @@ if(APPLE)
     endif()
     if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
         message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
-    endif() 
-
+    endif()
+    
     # Compile PiPL resource
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
@@ -219,17 +219,17 @@ if(APPLE)
         DEPENDS ${PIPL_RESOURCE} ${AE_CONFIG_HEADER} ${AE_GENERAL_RESOURCE}
         COMMENT "Compiling PiPL resource with Rez (using data fork)"
         VERBATIM
-    )   
-
+    )
+    
     # Bundle setup
     add_custom_command(TARGET AEPathLink POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/Resources/AEPathLink.rsrc
-        COMMAND ${CMAKE_COMMAND} -E echo "BNDL????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
+        COMMAND printf "BNDL????" > ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
         COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo
         COMMAND ${CMAKE_COMMAND} -E remove ${CMAKE_CURRENT_BINARY_DIR}/PkgInfo_temp
-        COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && exit 1)
+        COMMAND test `stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo` -eq 8 || (echo "Error: PkgInfo size is not 8 bytes" && stat -f%z $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && hexdump -C $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>/PkgInfo && exit 1)
         COMMAND codesign --force --sign - $<TARGET_BUNDLE_DIR:AEPathLink>
         DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
         COMMENT "Setting up bundle: dirs, .rsrc, PkgInfo, and signing"
