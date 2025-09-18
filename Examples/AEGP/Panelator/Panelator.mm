@@ -165,6 +165,10 @@ public:
     }
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 A_Err EntryPointFunc(
     struct SPBasicSuite* pica_basicP,
     A_long major_versionL,
@@ -175,3 +179,7 @@ A_Err EntryPointFunc(
         *global_refconP = (AEGP_GlobalRefcon) new Panelator(pica_basicP, aegp_plugin_id);
     } PT_XTE_CATCH_RETURN_ERR;
 }
+
+#ifdef __cplusplus
+}
+#endif
