@@ -852,7 +852,8 @@ void PanelatorUI_Mac::ExecuteSendToAI() {
     jsxScript += "    layers: results\n";
     jsxScript += "  };\n";
     jsxScript += "  var jsonString = simpleJSONStringify(exportData);\n";
-    jsxScript += "  var outputFile = new File(Folder.temp.fsName + '/ae2ai.json');\n";
+    jsxScript += "  var tempPath = Folder.temp.fsName.replace(/TemporaryItems$/, '');\n";
+    jsxScript += "  var outputFile = new File(tempPath + '/ae2ai.json');\n";
     jsxScript += "  if (!outputFile.open('w')) {\n";
     jsxScript += "    alert('Failed to create output file: ' + outputFile.error);\n";
     jsxScript += "    return;\n";
