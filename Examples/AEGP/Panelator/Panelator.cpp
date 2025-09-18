@@ -10,7 +10,7 @@
 #include "AE_GeneralPlugPanels.h"
 #include "AEGP_SuiteHandler.h"
 #include "PanelatorUI.h"
-#include "config.h"
+#include "Config.h"
 #include "LicensingUtils.h"
 
 #ifdef _WIN32

@@ -189,7 +189,7 @@ if(APPLE)
         -Wno-pragma-pack
         -Wno-unknown-pragmas
         -Wno-macro-redefined
-        -Wno-nonportable-include-paths
+        -Wno-nonportable-include-path
         -Wno-undefined-var-template
         -Wno-null-conversion
         -fobjc-arc
@@ -197,7 +197,7 @@ if(APPLE)
 
     # Define PiPL resource path
     set(PIPL_RESOURCE "${PANELATOR_SOURCE_DIR}/Win/AEPathLink.r")
-    
+
     # Verify input files
     if(NOT EXISTS "${PIPL_RESOURCE}")
         message(FATAL_ERROR "PiPL resource file not found at: ${PIPL_RESOURCE}")
@@ -210,7 +210,7 @@ if(APPLE)
     if(NOT EXISTS "${AE_GENERAL_RESOURCE}")
         message(FATAL_ERROR "AE_General.r not found at: ${AE_GENERAL_RESOURCE}")
     endif()
-    
+
     # Compile PiPL resource
     add_custom_command(
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/AEPathLink.rsrc
@@ -220,7 +220,7 @@ if(APPLE)
         COMMENT "Compiling PiPL resource with Rez (using data fork)"
         VERBATIM
     )
-    
+
     # Bundle setup
     add_custom_command(TARGET AEPathLink POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_BUNDLE_CONTENT_DIR:AEPathLink>
